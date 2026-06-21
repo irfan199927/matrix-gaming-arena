@@ -4,3 +4,12 @@ token.json
 .tmp/
 __pycache__/
 *.pyc
+
+# Internal / private files — not part of the live website
+CLAUDE.md
+Files/
+tools/
+workflows/
+images/games/README.txt
+matrix-gaming-arena-reviews.md
+matrix-gaming-arena-reviews.html
