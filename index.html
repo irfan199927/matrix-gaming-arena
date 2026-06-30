@@ -754,6 +754,56 @@
       .rev-grid { grid-template-columns: 1fr 1fr; }
       .footer-grid { grid-template-columns: 1fr 1fr; gap: 2.5rem 2rem; }
     }
+
+    @media (max-width: 700px) {
+      /* ── Nav ── */
+      .nav-links { display: none; }
+      .nav-cta { display: none; }
+      .nav-burger { display: block; }
+
+      /* ── Hero ── */
+      .hero-h1 { font-size: clamp(3.2rem, 15vw, 5.5rem); }
+      .hero-bottom { flex-direction: column; align-items: flex-start; gap: 1.2rem; }
+      #hero { padding-bottom: 3rem; }
+
+      /* ── General ── */
+      .section { padding: 4rem 5%; }
+      .statement-foot { gap: 1.2rem; flex-direction: column; }
+
+      /* ── FABs ── */
+      .fab-stack { right: 1rem; bottom: 1rem; }
+
+      /* ── Pricing tabs ── */
+      .price-tabs { width: 100%; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; margin-bottom: 2rem; }
+      .price-tabs::-webkit-scrollbar { display: none; }
+      .ptab { flex: 1 0 auto; min-width: 5rem; border-right: 1px solid var(--border); text-align: center; padding: .65rem .9rem; font-size: .65rem; }
+
+      /* ── Pricing table ── */
+      .price-info-title { font-size: 2.2rem; }
+      .price-info-spec { font-size: .72rem; }
+      .price-info-desc { font-size: .85rem; }
+      table.ptable { margin-top: 1.5rem; }
+      .ptable th { padding: .55rem .6rem; font-size: .58rem; letter-spacing: 1px; }
+      .ptable td { padding: .7rem .6rem; font-size: .88rem; }
+      .ptable .row-label { font-size: .78rem; }
+      .ptable .price-amt { font-size: .9rem; font-weight: 800; }
+      .price-visual { display: none; }
+
+      /* ── Memberships ── */
+      .mem-grid { grid-template-columns: 1fr; gap: 1rem; }
+
+      /* ── Reviews ── */
+      .rev-grid { grid-template-columns: 1fr; }
+
+      /* ── Footer ── */
+      .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+    }
+
+    @media (max-width: 380px) {
+      .ptable th { font-size: .52rem; padding: .5rem .45rem; }
+      .ptable td { font-size: .82rem; padding: .65rem .45rem; }
+      .ptable .price-amt { font-size: .85rem; }
+    }
     /* ════ HAPPY HOURS BAND ════ */
     .happy-band {
       position: relative; overflow: hidden;
@@ -848,21 +898,6 @@
       border: 1px solid var(--g); color: var(--g); transition-delay: .36s;
     }
 
-    @media (max-width: 700px) {
-      .nav-links { display: none; }
-      .nav-cta { display: none; }
-      .nav-burger { display: block; }
-      .fab-stack { right: 1rem; bottom: 1rem; }
-      .hero-h1 { font-size: clamp(3.5rem, 16vw, 5.5rem); }
-      .hero-bottom { flex-direction: column; align-items: flex-start; }
-      .mem-grid { grid-template-columns: 1fr; }
-      .rev-grid { grid-template-columns: 1fr; }
-      .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
-      .price-tabs { width: 100%; }
-      .ptab { flex: 1; border-right: 1px solid var(--border); text-align: center; }
-      .statement-foot { gap: 1.5rem; }
-      .section { padding: 5rem 4%; }
-    }
   </style>
 </head>
 <body class="loading">
@@ -1135,7 +1170,7 @@
   <div id="tab-racing" class="price-panel panel-racing">
     <div>
       <div class="price-info-title">RACING SIMULATOR</div>
-      <div class="price-info-spec">Full Motion Rig · Force Feedback Wheel · VR Headset</div>
+      <div class="price-info-spec">55" Screen · Full Motion Rig · Force Feedback Wheel · VR Headset</div>
       <p class="price-info-desc">Strap in and go. The full racing simulator — motion rig, VR headset, force feedback wheel and pedals. Gran Turismo 7, Forza, Assetto Corsa.</p>
       <table class="ptable">
         <thead><tr><th>Controllers</th><th>30 Mins</th><th>1 Hour</th></tr></thead>
