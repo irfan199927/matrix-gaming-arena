@@ -75,6 +75,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <!-- LCP: first hero slide is a CSS background the preload scanner can't see -->
+  <link rel="preload" as="image" href="images/arena.jpg" fetchpriority="high"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -87,14 +89,30 @@
       --card-bg: #141414;
       --border: rgba(255,255,255,.08);
       --muted: rgba(255,255,255,.5);   /* was .34 — bumped for readability / WCAG */
+      --faint: rgba(255,255,255,.4);   /* secondary text floor — anything a user reads stays ≥ this */
       --white: #f4f4f4;
       --ease: cubic-bezier(.16,1,.3,1);
+      /* motion tokens: micro-interactions / card & panel state / section reveals */
+      --t-fast: .25s;
+      --t-med: .5s;
+      --t-slow: .9s;
     }
 
     /* registered angle prop drives the featured-card animated border (graceful fallback elsewhere) */
     @property --ba { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
 
-    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: no-preference) {
+      html { scroll-behavior: smooth; }
+    }
+
+    /* metric-compatible fallback so the huge Bebas headline barely shifts on font swap */
+    @font-face {
+      font-family: 'Bebas Fallback';
+      src: local('Arial Narrow'), local('Impact');
+      size-adjust: 88%;
+    }
+
+    :focus-visible { outline: 2px solid var(--g); outline-offset: 3px; border-radius: 2px; }
 
     body {
       font-family: 'Inter', sans-serif;
@@ -118,7 +136,7 @@
     }
     #preloader.done { transform: translateY(-100%); }
     .pre-logo {
-      font-family: 'Bebas Neue', sans-serif;
+      font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif;
       font-size: clamp(2.5rem, 7vw, 5rem);
       letter-spacing: 6px; color: var(--white);
       overflow: hidden; line-height: 1;
@@ -131,7 +149,7 @@
     }
     .pre-fill { height: 100%; width: 0%; background: var(--g); transition: width .2s linear; }
     .pre-count {
-      font-family: 'Bebas Neue', sans-serif;
+      font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif;
       font-size: .9rem; letter-spacing: 3px;
       color: var(--muted); margin-top: .75rem;
     }
@@ -176,7 +194,7 @@
       border-bottom: 1px solid var(--border);
     }
     .logo {
-      font-family: 'Bebas Neue', sans-serif;
+      font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif;
       font-size: 1.15rem; letter-spacing: 5px;
       color: var(--white); text-decoration: none; z-index: 2;
     }
@@ -186,7 +204,7 @@
     .nav-links a {
       text-decoration: none; color: var(--muted);
       font-size: .72rem; font-weight: 500; letter-spacing: 2px;
-      text-transform: uppercase; position: relative; transition: color .25s;
+      text-transform: uppercase; position: relative; transition: color var(--t-fast);
     }
     .nav-links a::after {
       content: ''; position: absolute; left: 0; bottom: -5px;
@@ -198,7 +216,7 @@
       text-decoration: none; font-size: .72rem; font-weight: 600;
       letter-spacing: 2px; text-transform: uppercase;
       padding: .6rem 1.4rem; border: 1px solid var(--border);
-      color: var(--white); transition: border-color .25s, background .25s, color .25s;
+      color: var(--white); transition: border-color var(--t-fast), background var(--t-fast), color var(--t-fast);
     }
     .nav-cta:hover { border-color: var(--g); background: var(--g); color: #000; }
 
@@ -264,7 +282,7 @@
     }
 
     .hero-h1 {
-      font-family: 'Bebas Neue', sans-serif;
+      font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif;
       font-size: clamp(4rem, 13vw, 11rem);
       line-height: .85; letter-spacing: 2px; color: var(--white);
       margin-bottom: 2.5rem;
@@ -284,7 +302,7 @@
       display: inline-block; text-decoration: none;
       font-size: .72rem; font-weight: 700; letter-spacing: 2.5px;
       text-transform: uppercase; padding: 1rem 2.4rem; background: var(--g); color: #000;
-      transition: transform .3s var(--ease), box-shadow .3s;
+      transition: transform var(--t-fast) var(--ease), box-shadow var(--t-fast);
     }
     .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 40px rgba(0,255,159,.3); }
     .btn-outline {
@@ -292,7 +310,7 @@
       font-size: .72rem; font-weight: 600; letter-spacing: 2.5px;
       text-transform: uppercase; padding: 1rem 2.4rem;
       border: 1px solid rgba(255,255,255,.25); color: var(--white);
-      transition: background .3s, color .3s, border-color .3s;
+      transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
     }
     .btn-outline:hover { background: var(--white); color: #000; border-color: var(--white); }
 
@@ -310,7 +328,7 @@
     .ticker-track { display: inline-block; animation: ticker 30s linear infinite; }
     .ticker:hover .ticker-track { animation-play-state: paused; }
     .ticker-track span {
-      display: inline-block; font-family: 'Bebas Neue', sans-serif;
+      display: inline-block; font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif;
       font-size: 1rem; letter-spacing: 4px; color: #000; padding: 0 1.4rem;
     }
     .ticker.dark .ticker-track span { color: var(--white); }
@@ -329,7 +347,7 @@
     }
     .statement-label::before { content: ''; width: 28px; height: 2px; background: #000; }
     .statement-text {
-      font-family: 'Bebas Neue', sans-serif;
+      font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif;
       font-size: clamp(1.8rem, 4.5vw, 3.8rem);
       line-height: 1.05; letter-spacing: 1px; max-width: 1000px;
     }
@@ -340,7 +358,7 @@
       border-top: 2px solid rgba(0,0,0,.2); padding-top: 2rem;
     }
     .statement-foot div { font-size: .8rem; font-weight: 600; letter-spacing: 1px; max-width: 220px; line-height: 1.5; }
-    .statement-foot strong { display: block; font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; margin-bottom: .3rem; }
+    .statement-foot strong { display: block; font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif; font-size: 1.4rem; letter-spacing: 2px; margin-bottom: .3rem; }
 
     /* ════ SECTION SHELL ════ */
     .section { padding: 7rem 4%; }
@@ -351,10 +369,12 @@
     }
     .section-label::before { content: ''; width: 22px; height: 1px; background: var(--g); }
     .section-heading {
-      font-family: 'Bebas Neue', sans-serif;
+      font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif;
+      font-weight: 400; /* headings are h2 now — Bebas has no bold, stop the browser faux-bolding it */
       font-size: clamp(2.5rem, 6vw, 5.5rem);
       line-height: .92; letter-spacing: 2px; color: var(--white);
     }
+    .section-heading--gap { margin-bottom: 3rem; }
 
     /* ════ EXPERIENCES ════ */
     #experiences {
@@ -378,12 +398,14 @@
     .exp-panel-photo img {
       width: 100%; height: 100%; object-fit: cover; object-position: center;
       filter: brightness(.62) saturate(.85);
-      transition: filter .6s var(--ease), transform .9s var(--ease), clip-path 1.1s var(--ease);
-      transform: scale(1.05);
+      /* scroll parallax writes --py only; hover zoom rides the separate `scale` property so the two never fight */
+      transition: filter .6s var(--ease), scale var(--t-slow) var(--ease), clip-path 1.1s var(--ease);
+      transform: translateY(var(--py, 0px));
+      scale: 1.12;
       clip-path: inset(0 0 0 100%);
     }
     .exp-panel-photo.in img { clip-path: inset(0 0 0 0); }
-    .exp-panel:hover .exp-panel-photo img { filter: brightness(.85) saturate(1.05); transform: scale(1); }
+    .exp-panel:hover .exp-panel-photo img { filter: brightness(.85) saturate(1.05); scale: 1.05; }
     .exp-panel-info {
       padding: 4.5rem; display: flex; flex-direction: column; justify-content: center;
       background: var(--off-black); position: relative;
@@ -391,7 +413,7 @@
     .exp-panel:nth-child(even) .exp-panel-photo { order: 2; }
     .exp-panel:nth-child(even) .exp-panel-info { order: 1; }
     .exp-num {
-      font-family: 'Bebas Neue', sans-serif; font-size: 8rem; line-height: 1;
+      font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif; font-size: 8rem; line-height: 1;
       color: rgba(255,255,255,.04); position: absolute; top: 2rem; right: 3rem;
       letter-spacing: -4px; pointer-events: none;
     }
@@ -405,7 +427,7 @@
     .ep-vr .exp-tag { border-color: rgba(168,85,247,.35); color: #c084fc; }
     .ep-racing .exp-tag { border-color: rgba(249,115,22,.35); color: #fb923c; }
     .exp-panel-name {
-      font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 4.5vw, 4rem);
+      font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif; font-weight: 400; font-size: clamp(2.5rem, 4.5vw, 4rem);
       letter-spacing: 3px; color: var(--white); line-height: .95; margin-bottom: 1rem;
     }
     .exp-panel-spec { font-size: .82rem; color: var(--muted); letter-spacing: 1px; line-height: 1.7; margin-bottom: 2.25rem; }
@@ -427,7 +449,7 @@
     .gfilter:last-child { border-right: none; }
     .gfilter.active, .gfilter:hover { background: var(--g); color: #000; }
     .games-arrows { display: flex; gap: .5rem; }
-    .garrow { width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; background: transparent; border: 1px solid var(--border); color: var(--white); cursor: none; transition: background .25s, border-color .25s, color .25s, opacity .25s; }
+    .garrow { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: transparent; border: 1px solid var(--border); color: var(--white); cursor: none; transition: background .25s, border-color .25s, color .25s, opacity .25s; }
     .garrow:hover { background: var(--g); border-color: var(--g); color: #000; }
     .garrow:disabled { opacity: .3; pointer-events: none; }
     .game-card.hide { display: none; }
@@ -435,8 +457,8 @@
     .game-more { display: flex; align-items: center; justify-content: center; background: transparent; border: 1px dashed rgba(255,255,255,.18); }
     .game-more:hover { border-color: var(--g); background: rgba(0,255,159,.04); }
     .game-more-inner { text-align: center; padding: 1rem; }
-    .game-more-plus { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; line-height: 1; color: var(--g); margin-bottom: .5rem; }
-    .game-more-text { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: var(--white); line-height: 1.1; }
+    .game-more-plus { font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif; font-size: 3rem; line-height: 1; color: var(--g); margin-bottom: .5rem; }
+    .game-more-text { font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: var(--white); line-height: 1.1; }
     .game-more-sub { font-size: .62rem; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-top: .4rem; }
     .games-scroll {
       display: flex; gap: .85rem; overflow-x: auto; scroll-snap-type: x mandatory;
@@ -446,21 +468,21 @@
     .game-card {
       flex: 0 0 158px; height: 224px; border-radius: 4px; overflow: hidden;
       position: relative; scroll-snap-align: start;
-      transition: transform .4s var(--ease), border-color .3s;
+      transition: transform var(--t-med) var(--ease), border-color var(--t-fast);
       border: 1px solid var(--border);
     }
-    .game-card:hover { transform: translateY(-10px); border-color: rgba(255,255,255,.18); }
+    .game-card:hover { border-color: rgba(255,255,255,.18); }
     .game-card-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; z-index: 1; transition: transform .5s var(--ease); }
     .game-card:hover .game-card-img { transform: scale(1.08); }
     .game-card-overlay { position: absolute; inset: 0; z-index: 2; background: linear-gradient(0deg, rgba(0,0,0,.92) 0%, rgba(0,0,0,.25) 50%, transparent 100%); }
     .game-card-emblem {
       position: absolute; top: -8px; right: 4px; z-index: 0;
-      font-family: 'Bebas Neue', sans-serif; font-size: 5.2rem; line-height: 1;
+      font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif; font-size: 5.2rem; line-height: 1;
       letter-spacing: -3px; color: rgba(255,255,255,.06); pointer-events: none; transition: color .3s;
     }
     .game-card:hover .game-card-emblem { color: rgba(255,255,255,.13); }
     .game-card-info { position: absolute; bottom: 0; left: 0; right: 0; padding: .8rem; z-index: 3; }
-    .game-card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 1px; color: #fff; line-height: 1.15; }
+    .game-card-title { font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif; font-size: 1rem; letter-spacing: 1px; color: #fff; line-height: 1.15; }
     .game-card-platform { font-size: .58rem; font-weight: 600; letter-spacing: 1.5px; color: rgba(255,255,255,.4); text-transform: uppercase; margin-top: 3px; }
     .gc-gow { background: linear-gradient(145deg, #1a0000, #6b0000 40%, #1a0000); }
     .gc-spiderman { background: linear-gradient(145deg, #0d0d30, #8b0000 50%, #1a0030); }
@@ -493,7 +515,7 @@
     .big-num-item { padding: 1.5rem 2.5rem; border-right: 1px solid var(--border); }
     .big-num-item:first-child { padding-left: 0; }
     .big-num-item:last-child { border-right: none; }
-    .big-num { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 6vw, 5.5rem); color: var(--white); letter-spacing: -1px; line-height: 1; }
+    .big-num { font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif; font-size: clamp(3rem, 6vw, 5.5rem); color: var(--white); letter-spacing: -1px; line-height: 1; }
     .big-num-unit { color: var(--g); }
     .big-num-lbl { font-size: .7rem; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: .6rem; }
 
@@ -515,7 +537,7 @@
     .price-panel { display: none; }
     .price-panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; animation: fadeUp .6s var(--ease); }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
-    .price-info-title { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; letter-spacing: 3px; color: var(--white); margin-bottom: .4rem; }
+    .price-info-title { font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif; font-weight: 400; font-size: 3rem; letter-spacing: 3px; color: var(--white); margin-bottom: .4rem; }
     .price-info-spec { font-size: .78rem; color: var(--muted); letter-spacing: 1px; margin-bottom: 1.5rem; line-height: 1.6; }
     .price-info-desc { font-size: .9rem; line-height: 1.8; color: rgba(255,255,255,.4); max-width: 360px; }
     .price-visual { aspect-ratio: 4/3; overflow: hidden; position: relative; }
@@ -523,7 +545,7 @@
     .price-panel.active:hover .price-visual img { filter: brightness(.78) saturate(1); transform: scale(1.04); }
     table.ptable { width: 100%; border-collapse: collapse; margin-top: 2.5rem; }
     .ptable thead tr { border-bottom: 1px solid var(--border); }
-    .ptable th { padding: .65rem 1rem; font-size: .62rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,.32); text-align: left; }
+    .ptable th { padding: .65rem 1rem; font-size: .62rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--faint); text-align: left; }
     .ptable th:not(:first-child) { text-align: center; }
     .ptable td { padding: .8rem 1rem; font-size: .9rem; border-bottom: 1px solid rgba(255,255,255,.04); }
     .ptable td:not(:first-child) { text-align: center; }
@@ -531,6 +553,7 @@
     .ptable tbody tr:hover td { background: rgba(255,255,255,.025); }
     .ptable .row-label { color: var(--white); font-weight: 500; font-size: .82rem; }
     .ptable .price-amt { font-size: .85rem; font-weight: 700; }
+    .price-cta { display: inline-block; margin-top: 1.75rem; }
     .panel-ps5 .price-amt { color: #60a5fa; }
     .panel-arena .price-amt { color: var(--c); }
     .panel-racing .price-amt { color: #fb923c; }
@@ -552,7 +575,7 @@
     .mem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
     .mem-card {
       background: var(--card-bg); padding: 2.4rem 2rem; position: relative; overflow: hidden;
-      transition: background .3s, transform .3s var(--ease);
+      transition: background var(--t-fast), transform var(--t-fast) var(--ease);
       /* subtle lit top edge + drop to lift card off the black */
       box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 2px 6px rgba(0,0,0,.45);
     }
@@ -574,16 +597,25 @@
     }
     @keyframes spinBorder { to { --ba: 360deg; } }
 
-    .mem-pass-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.35rem; letter-spacing: 3px; color: var(--accent, var(--g)); margin-bottom: .25rem; }
-    .mem-pass-badge { font-size: .58rem; font-weight: 600; letter-spacing: 1.5px; color: rgba(255,255,255,.28); text-transform: uppercase; margin-bottom: 1.5rem; }
+    .mem-pass-name { font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif; font-weight: 400; font-size: 1.35rem; letter-spacing: 3px; color: var(--accent, var(--g)); margin-bottom: .25rem; }
+    .mem-pass-badge { font-size: .58rem; font-weight: 600; letter-spacing: 1.5px; color: var(--faint); text-transform: uppercase; margin-bottom: 1.5rem; }
     .mem-price-row { display: flex; align-items: baseline; gap: .4rem; margin-bottom: .2rem; }
-    .mem-price { font-family: 'Bebas Neue', sans-serif; font-size: 2.1rem; color: var(--white); letter-spacing: 1px; }
-    .mem-price-label { font-size: .72rem; color: rgba(255,255,255,.28); letter-spacing: 1px; }
-    .mem-hours-row { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; color: var(--accent, var(--g)); letter-spacing: 2px; margin-bottom: 1.5rem; }
+    .mem-price { font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif; font-size: 2.1rem; color: var(--white); letter-spacing: 1px; }
+    .mem-price-label { font-size: .72rem; color: var(--faint); letter-spacing: 1px; }
+    .mem-hours-row { font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif; font-size: 1rem; color: var(--accent, var(--g)); letter-spacing: 2px; margin-bottom: 1.5rem; }
     .mem-divider { height: 1px; background: var(--border); margin-bottom: 1.25rem; }
     .mem-features { list-style: none; display: flex; flex-direction: column; gap: .55rem; }
     .mem-features li { font-size: .78rem; color: rgba(255,255,255,.42); display: flex; align-items: center; gap: .6rem; }
     .mem-features li::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--accent, var(--g)); flex-shrink: 0; }
+    .mem-price--text { font-size: 1.4rem; align-self: center; }
+    .mem-cta {
+      margin-top: 1.75rem; display: inline-block; width: fit-content;
+      padding: .7rem 1.4rem; font-size: .68rem; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase; text-decoration: none;
+      border: 1px solid var(--accent, var(--g)); color: var(--accent, var(--g));
+      transition: background var(--t-fast), color var(--t-fast);
+    }
+    .mem-cta:hover { background: var(--accent, var(--g)); color: #000; }
     /* tightened palette: green → teal → cyan → blue → purple ramp (brand trio) */
     .pass-entry    { --accent: #00ff9f; } /* green   */
     .pass-standard { --accent: #00d9d0; } /* teal    */
@@ -600,18 +632,18 @@
     }
     .rev-header { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 2rem; margin-bottom: 3rem; }
     .rev-summary { display: flex; align-items: center; gap: 1.1rem; border: 1px solid var(--border); padding: 1rem 1.5rem; }
-    .rev-summary-score { font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; line-height: 1; color: var(--white); }
+    .rev-summary-score { font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif; font-size: 2.8rem; line-height: 1; color: var(--white); }
     .rev-summary-stars { color: #fbbc04; font-size: .95rem; letter-spacing: 2px; }
     .rev-summary-meta { font-size: .66rem; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; margin-top: 4px; }
     .rev-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
     .rev-card {
       background: var(--card-bg); padding: 2rem 1.75rem; display: flex; flex-direction: column; gap: 1rem;
-      transition: background .3s;
+      transition: background var(--t-fast);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 2px 6px rgba(0,0,0,.45);
     }
     .rev-card:hover { background: #1a1a1a; }
     .rev-card-top { display: flex; align-items: center; gap: .85rem; }
-    .rev-avatar { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; letter-spacing: 1px; color: #000; flex-shrink: 0; }
+    .rev-avatar { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif; font-size: 1.15rem; letter-spacing: 1px; color: #000; flex-shrink: 0; }
     .rev-name { font-size: .85rem; font-weight: 600; color: var(--white); }
     .rev-date { font-size: .66rem; color: var(--muted); margin-top: 2px; }
     .rev-g { margin-left: auto; flex-shrink: 0; opacity: .9; }
@@ -652,9 +684,9 @@
     .social-photo.in img { clip-path: inset(0 0 0 0); }
     #social:hover .social-photo img { transform: scale(1); filter: brightness(.62) saturate(.9); }
     .social-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to right, transparent 55%, var(--black) 100%); }
-    .social-content { display: flex; flex-direction: column; justify-content: center; padding: 6rem 5%; }
+    .social-content { display: flex; flex-direction: column; justify-content: center; padding: 6rem 4%; }
     .social-eyebrow { font-size: .65rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
-    .social-heading { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 6vw, 5rem); line-height: .92; letter-spacing: 2px; color: var(--white); margin-bottom: 1.5rem; }
+    .social-heading { font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif; font-weight: 400; font-size: clamp(3rem, 6vw, 5rem); line-height: .92; letter-spacing: 2px; color: var(--white); margin-bottom: 1.5rem; }
     .social-sub { font-size: .9rem; line-height: 1.75; color: var(--muted); max-width: 360px; margin-bottom: 2.5rem; }
     .btn-ig {
       display: inline-flex; align-items: center; gap: .6rem; text-decoration: none; padding: 1rem 2.4rem;
@@ -668,7 +700,7 @@
     /* ════ FOOTER ════ */
     footer { padding: 4.5rem 4% 2rem; background: var(--off-black); border-top: 1px solid var(--border); }
     .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 2.5rem; margin-bottom: 3.5rem; }
-    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 4px; color: var(--white); }
+    .footer-logo { font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif; font-size: 1.3rem; letter-spacing: 4px; color: var(--white); }
     .footer-logo em { color: var(--g); font-style: normal; }
     .footer-tag { font-size: .8rem; line-height: 1.7; color: var(--muted); margin: 1.1rem 0; max-width: 280px; }
     .footer-h { font-size: .62rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--g); margin-bottom: 1rem; }
@@ -676,22 +708,24 @@
     .footer-ig, .footer-link { display: inline-block; text-decoration: none; color: var(--white); font-size: .82rem; transition: color .25s; }
     .footer-ig:hover, .footer-link:hover { color: var(--g); }
     .footer-link { margin-top: .85rem; font-weight: 600; letter-spacing: 1px; }
-    .footer-phone { display: inline-block; text-decoration: none; font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: 2px; color: var(--white); transition: color .25s; }
+    .footer-phone { display: inline-block; text-decoration: none; font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif; font-size: 1.7rem; letter-spacing: 2px; color: var(--white); transition: color .25s; }
     .footer-phone:hover { color: var(--g); }
     .footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; border-top: 1px solid var(--border); padding-top: 1.75rem; }
     .footer-bottom p { font-size: .7rem; color: rgba(255,255,255,.2); letter-spacing: 1px; }
 
     /* ════ SCROLL REVEAL ════ */
-    .reveal { opacity: 0; transform: translateY(34px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+    .reveal { opacity: 0; transform: translateY(34px); transition: opacity var(--t-slow) var(--ease), transform var(--t-slow) var(--ease); }
     .reveal.visible { opacity: 1; transform: none; }
-    .reveal-d1 { transition-delay: .08s; } .reveal-d2 { transition-delay: .16s; } .reveal-d3 { transition-delay: .24s; }
+    /* 60ms stagger base — matches the mobile menu and statement word cadence */
+    .reveal-d1 { transition-delay: .06s; } .reveal-d2 { transition-delay: .12s; } .reveal-d3 { transition-delay: .18s; }
 
     /* heading clip-mask wipe-up (overrides plain fade for big headings) */
     .section-heading.reveal { opacity: 1; transform: none; clip-path: inset(0 0 110% 0); transition: clip-path 1s var(--ease); }
     .section-heading.reveal.visible { clip-path: inset(0 0 -12% 0); }
 
     /* ════ SCROLL PROGRESS BAR ════ */
-    #progress { position: fixed; top: 0; left: 0; height: 2px; width: 0; background: var(--g); z-index: 1000; box-shadow: 0 0 10px rgba(0,255,159,.6); will-change: width; }
+    /* scaleX instead of width: compositor-only, no per-frame layout */
+    #progress { position: fixed; top: 0; left: 0; height: 2px; width: 100%; transform: scaleX(0); transform-origin: 0 0; background: var(--g); z-index: 1000; box-shadow: 0 0 10px rgba(0,255,159,.6); will-change: transform; }
 
     /* ════ MATRIX RAIN ════ */
     #rain { position: absolute; inset: 0; z-index: 1; opacity: .32; mix-blend-mode: screen; pointer-events: none; }
@@ -721,7 +755,7 @@
     /* ════ KINETIC DIVIDER ════ */
     .kinetic-band { overflow: hidden; padding: 3.5rem 0; background: var(--black); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
     .kinetic-text {
-      font-family: 'Bebas Neue', sans-serif; white-space: nowrap;
+      font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif; white-space: nowrap;
       font-size: clamp(4rem, 15vw, 13rem); line-height: .9; letter-spacing: 2px;
       -webkit-text-stroke: 1.5px rgba(255,255,255,.16); color: transparent;
       will-change: transform; transform: translateX(0);
@@ -821,7 +855,7 @@
     }
     @keyframes happyShine { 0% { left: -60%; } 55%, 100% { left: 130%; } }
     .happy-tag {
-      font-family: 'Bebas Neue', sans-serif; letter-spacing: 3px;
+      font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif; letter-spacing: 3px;
       font-size: .72rem; color: #000; background: var(--g);
       padding: .35rem .75rem; border-radius: 2px; position: relative; z-index: 1;
     }
@@ -881,7 +915,7 @@
     }
     body.menu-open .mobile-menu { opacity: 1; visibility: visible; }
     .mobile-menu a {
-      font-family: 'Bebas Neue', sans-serif; font-size: 2.1rem; letter-spacing: 4px;
+      font-family: 'Bebas Neue', 'Bebas Fallback', sans-serif; font-size: 2.1rem; letter-spacing: 4px;
       color: var(--white); text-decoration: none; opacity: .35;
       transform: translateY(14px); transition: opacity .4s var(--ease), transform .4s var(--ease), color .25s;
     }
@@ -899,6 +933,17 @@
     }
 
   </style>
+  <noscript><style>
+    /* without JS the preloader and reveal states would blank the whole page */
+    #preloader { display: none; }
+    body.loading { overflow: auto; height: auto; }
+    .hero-h1 .line span { transform: none !important; }
+    .hero-eyebrow, .hero-bottom { opacity: 1 !important; transform: none !important; }
+    .reveal { opacity: 1 !important; transform: none !important; }
+    .section-heading.reveal { clip-path: none !important; }
+    .exp-panel-photo img, .social-photo img { clip-path: none !important; }
+    .ticker-track, .rev-marquee-track { animation: none !important; }
+  </style></noscript>
 </head>
 <body class="loading">
 
@@ -928,7 +973,7 @@
       <li><a href="#memberships">Passes</a></li>
       <li><a href="#reviews">Reviews</a></li>
     </ul>
-    <a href="https://www.instagram.com/thematrixgamingarena/" target="_blank" rel="noopener" class="nav-cta">Follow Us</a>
+    <a href="https://wa.me/918369769652?text=Hi%2C%20I%27d%20like%20to%20book%20a%20slot%20at%20The%20Matrix%20Gaming%20Arena" target="_blank" rel="noopener" class="nav-cta">Book a Slot</a>
     <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
@@ -942,7 +987,7 @@
   <a href="#pricing">Pricing</a>
   <a href="#memberships">Passes</a>
   <a href="#reviews">Reviews</a>
-  <a href="https://www.instagram.com/thematrixgamingarena/" target="_blank" rel="noopener" class="mm-cta">Follow Us</a>
+  <a href="https://wa.me/918369769652?text=Hi%2C%20I%27d%20like%20to%20book%20a%20slot%20at%20The%20Matrix%20Gaming%20Arena" target="_blank" rel="noopener" class="mm-cta">Book a Slot</a>
 </div>
 
 <!-- ════ HERO ════ -->
@@ -957,10 +1002,11 @@
       </video>
     -->
     <div class="hero-slide active" style="background-image:url('images/arena.jpg')"></div>
-    <div class="hero-slide" style="background-image:url('images/ps5.jpg')"></div>
-    <div class="hero-slide" style="background-image:url('images/neon.jpg')"></div>
-    <div class="hero-slide" style="background-image:url('images/racing.jpg')"></div>
-    <div class="hero-slide" style="background-image:url('images/vr.jpg')"></div>
+    <!-- slides 2–5 lazy-load via data-bg in startHero() so they don't compete with the LCP image -->
+    <div class="hero-slide" data-bg="images/ps5.jpg"></div>
+    <div class="hero-slide" data-bg="images/neon.jpg"></div>
+    <div class="hero-slide" data-bg="images/racing.jpg"></div>
+    <div class="hero-slide" data-bg="images/vr.jpg"></div>
     <canvas id="rain"></canvas>
     <div class="hero-grain"></div>
   </div>
@@ -988,7 +1034,7 @@
 <!-- ════ TICKER ════ -->
 <div class="ticker" aria-hidden="true">
   <div class="ticker-track">
-    <span>PS5 GAMING</span><span>PSVR2</span><span>RACING SIM</span><span>BIG-SCREEN ARENA</span><span>TEKKEN 8</span><span>GOD OF WAR</span><span>GRAN TURISMO 7</span><span>EA FC 25</span><span>KHARGHAR</span>
+    <!-- content is duplicated once by JS for the seamless loop -->
     <span>PS5 GAMING</span><span>PSVR2</span><span>RACING SIM</span><span>BIG-SCREEN ARENA</span><span>TEKKEN 8</span><span>GOD OF WAR</span><span>GRAN TURISMO 7</span><span>EA FC 25</span><span>KHARGHAR</span>
   </div>
 </div>
@@ -1009,50 +1055,50 @@
   <div class="exp-intro">
     <div>
       <div class="section-label reveal">What We've Got</div>
-      <div class="section-heading reveal reveal-d1">PICK YOUR<br/>WEAPON</div>
+      <h2 class="section-heading reveal reveal-d1">PICK YOUR<br/>WEAPON</h2>
     </div>
     <p class="exp-intro-p reveal reveal-d2">Four distinct experiences under one roof — from console classics to full-motion racing rigs. There's something here for every kind of player.</p>
   </div>
 
   <div class="exp-panel ep-ps5">
-    <div class="exp-panel-photo"><img src="images/ps5.jpg" alt="PS5 Gaming Setup"/></div>
+    <div class="exp-panel-photo"><img src="images/ps5.jpg" alt="PS5 Gaming Setup" loading="lazy" decoding="async"/></div>
     <div class="exp-panel-info reveal">
       <div class="exp-num">01</div>
       <div class="exp-tag">Console</div>
-      <div class="exp-panel-name">PS5<br/>GAMING</div>
+      <h3 class="exp-panel-name">PS5<br/>GAMING</h3>
       <p class="exp-panel-spec">55" Screen · Up to 4 Players<br/>DualSense Controllers · Latest Titles</p>
       <a href="#pricing" class="exp-panel-link">See Pricing <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
     </div>
   </div>
 
   <div class="exp-panel ep-arena">
-    <div class="exp-panel-photo"><img src="images/arena.jpg" alt="Big-Screen Gaming Arena"/></div>
+    <div class="exp-panel-photo"><img src="images/arena.jpg" alt="Big-Screen Gaming Arena" loading="lazy" decoding="async"/></div>
     <div class="exp-panel-info reveal">
       <div class="exp-num">02</div>
       <div class="exp-tag">Big Screen</div>
-      <div class="exp-panel-name">THE<br/>ARENA</div>
+      <h3 class="exp-panel-name">THE<br/>ARENA</h3>
       <p class="exp-panel-spec">75" Big Screen · Up to 4 Players<br/>Controller Party Gaming · FC, GTA, Tekken &amp; more</p>
       <a href="#pricing" class="exp-panel-link">See Pricing <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
     </div>
   </div>
 
   <div class="exp-panel ep-vr">
-    <div class="exp-panel-photo"><img src="images/vr.jpg" alt="PSVR2 Virtual Reality"/></div>
+    <div class="exp-panel-photo"><img src="images/vr.jpg" alt="PSVR2 Virtual Reality" loading="lazy" decoding="async"/></div>
     <div class="exp-panel-info reveal">
       <div class="exp-num">03</div>
       <div class="exp-tag">Virtual Reality</div>
-      <div class="exp-panel-name">PSVR2</div>
+      <h3 class="exp-panel-name">PSVR2</h3>
       <p class="exp-panel-spec">PS5 Powered · 4K OLED Panels<br/>Eye Tracking · 110° Field of View</p>
       <a href="#pricing" class="exp-panel-link">See Pricing <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
     </div>
   </div>
 
   <div class="exp-panel ep-racing">
-    <div class="exp-panel-photo"><img src="images/racing.jpg" alt="Racing Simulator"/></div>
+    <div class="exp-panel-photo"><img src="images/racing.jpg" alt="Racing Simulator" loading="lazy" decoding="async"/></div>
     <div class="exp-panel-info reveal">
       <div class="exp-num">04</div>
       <div class="exp-tag">Simulator</div>
-      <div class="exp-panel-name">RACING<br/>SIM</div>
+      <h3 class="exp-panel-name">RACING<br/>SIM</h3>
       <p class="exp-panel-spec">Full Motion Rig · Force Feedback Wheel<br/>VR Headset · Gran Turismo 7</p>
       <a href="#pricing" class="exp-panel-link">See Pricing <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
     </div>
@@ -1064,7 +1110,7 @@
   <div class="games-top">
     <div>
       <div class="section-label reveal">Library</div>
-      <div class="section-heading reveal reveal-d1">WHAT'S ON</div>
+      <h2 class="section-heading reveal reveal-d1">WHAT'S ON</h2>
     </div>
     <div class="games-controls reveal reveal-d2">
       <div class="games-filter">
@@ -1122,18 +1168,18 @@
 <!-- ════ PRICING ════ -->
 <section id="pricing" class="section">
   <div class="section-label reveal">Session Rates</div>
-  <div class="section-heading reveal reveal-d1" style="margin-bottom:3rem">PRICING</div>
+  <h2 class="section-heading section-heading--gap reveal reveal-d1">PRICING</h2>
 
   <div class="price-tabs reveal reveal-d2">
-    <button class="ptab active" onclick="showTab('ps5',this)">PS5</button>
-    <button class="ptab" onclick="showTab('arena',this)">The Arena</button>
-    <button class="ptab" onclick="showTab('racing',this)">Racing Sim</button>
-    <button class="ptab" onclick="showTab('vr',this)">PSVR2</button>
+    <button class="ptab active" data-tab="ps5" type="button">PS5</button>
+    <button class="ptab" data-tab="arena" type="button">The Arena</button>
+    <button class="ptab" data-tab="racing" type="button">Racing Sim</button>
+    <button class="ptab" data-tab="vr" type="button">PSVR2</button>
   </div>
 
   <div id="tab-ps5" class="price-panel panel-ps5 active">
     <div>
-      <div class="price-info-title">PS5 CONSOLE</div>
+      <h3 class="price-info-title">PS5 CONSOLE</h3>
       <div class="price-info-spec">55" Screen · 144Hz · Up to 4 Players · DualSense Controllers</div>
       <p class="price-info-desc">Latest PS5 titles on a big screen with haptic feedback controllers. Perfect for solo sessions, friendly 1v1s, or full 4-player chaos.</p>
       <table class="ptable">
@@ -1145,13 +1191,14 @@
           <tr><td class="row-label">4P</td><td class="price-amt">₹240</td><td class="price-amt">₹300</td><td class="price-amt">₹540</td></tr>
         </tbody>
       </table>
+      <a class="btn-primary price-cta" href="https://wa.me/918369769652?text=Hi%2C%20I%27d%20like%20to%20book%20a%20PS5%20station" target="_blank" rel="noopener">Book a PS5 Station</a>
     </div>
-    <div class="price-visual"><img src="images/ps5.jpg" alt="PS5 Gaming"/></div>
+    <div class="price-visual"><img src="images/ps5.jpg" alt="PS5 Gaming" loading="lazy" decoding="async"/></div>
   </div>
 
   <div id="tab-arena" class="price-panel panel-arena">
     <div>
-      <div class="price-info-title">THE ARENA</div>
+      <h3 class="price-info-title">THE ARENA</h3>
       <div class="price-info-spec">75" Big Screen · 144Hz · Up to 4 Players · Controllers</div>
       <p class="price-info-desc">Our biggest screen with controllers for the whole squad — up to 4 players. Perfect for FC, GTA, Tekken and party nights with friends.</p>
       <table class="ptable">
@@ -1163,13 +1210,14 @@
           <tr><td class="row-label">4P</td><td class="price-amt">₹300</td><td class="price-amt">₹420</td><td class="price-amt">₹720</td></tr>
         </tbody>
       </table>
+      <a class="btn-primary price-cta" href="https://wa.me/918369769652?text=Hi%2C%20I%27d%20like%20to%20book%20The%20Arena" target="_blank" rel="noopener">Book The Arena</a>
     </div>
-    <div class="price-visual"><img src="images/arena.jpg" alt="Big-Screen Arena"/></div>
+    <div class="price-visual"><img src="images/arena.jpg" alt="Big-Screen Arena" loading="lazy" decoding="async"/></div>
   </div>
 
   <div id="tab-racing" class="price-panel panel-racing">
     <div>
-      <div class="price-info-title">RACING SIMULATOR</div>
+      <h3 class="price-info-title">RACING SIMULATOR</h3>
       <div class="price-info-spec">55" Screen · Full Motion Rig · Force Feedback Wheel · VR Headset</div>
       <p class="price-info-desc">Strap in and go. The full racing simulator — motion rig, VR headset, force feedback wheel and pedals. Gran Turismo 7, Forza, Assetto Corsa.</p>
       <table class="ptable">
@@ -1179,21 +1227,23 @@
           <tr><td class="row-label">SIM + VR</td><td class="price-amt">₹240</td><td class="price-amt">₹400</td></tr>
         </tbody>
       </table>
+      <a class="btn-primary price-cta" href="https://wa.me/918369769652?text=Hi%2C%20I%27d%20like%20to%20book%20the%20Racing%20Simulator" target="_blank" rel="noopener">Book the Racing Sim</a>
     </div>
-    <div class="price-visual"><img src="images/racing.jpg" alt="Racing Simulator"/></div>
+    <div class="price-visual"><img src="images/racing.jpg" alt="Racing Simulator" loading="lazy" decoding="async"/></div>
   </div>
 
   <div id="tab-vr" class="price-panel panel-vr">
     <div>
-      <div class="price-info-title">PSVR2</div>
+      <h3 class="price-info-title">PSVR2</h3>
       <div class="price-info-spec">PlayStation VR2 · 4K OLED · Eye Tracking · Adaptive Triggers</div>
       <p class="price-info-desc">Sony's next-gen VR headset on PS5. Eye tracking, foveated rendering, 110° field of view — nothing else feels like this.</p>
       <table class="ptable">
         <thead><tr><th>Controllers</th><th>30 Mins</th><th>1 Hour</th></tr></thead>
         <tbody><tr><td class="row-label">1P</td><td class="price-amt">₹200</td><td class="price-amt">₹300</td></tr></tbody>
       </table>
+      <a class="btn-primary price-cta" href="https://wa.me/918369769652?text=Hi%2C%20I%27d%20like%20to%20book%20a%20PSVR2%20session" target="_blank" rel="noopener">Book a PSVR2 Session</a>
     </div>
-    <div class="price-visual"><img src="images/vr.jpg" alt="PSVR2"/></div>
+    <div class="price-visual"><img src="images/vr.jpg" alt="PSVR2" loading="lazy" decoding="async"/></div>
   </div>
 </section>
 
@@ -1202,47 +1252,53 @@
   <div class="mem-header">
     <div>
       <div class="section-label reveal">Monthly Passes</div>
-      <div class="section-heading reveal reveal-d1">MEMBER<br/>SHIPS</div>
+      <h2 class="section-heading reveal reveal-d1">MEMBER<br/>SHIPS</h2>
     </div>
     <div class="mem-badge reveal reveal-d2">⚡ First 50 Members Only</div>
   </div>
 
   <div class="mem-grid">
     <div class="mem-card pass-entry reveal">
-      <div class="mem-pass-name">Entry Pass</div><div class="mem-pass-badge">Starter</div>
+      <h3 class="mem-pass-name">Entry Pass</h3><div class="mem-pass-badge">Starter</div>
       <div class="mem-price-row"><span class="mem-price">₹1,499</span><span class="mem-price-label">/ month</span></div>
       <div class="mem-hours-row">24 Hours</div><div class="mem-divider"></div>
       <ul class="mem-features"><li>24 Hours PS5 Play Time</li><li>3 Arena Entries</li><li>Valid for 30 Days</li></ul>
+      <a class="mem-cta" href="https://wa.me/918369769652?text=Hi%2C%20I%27d%20like%20the%20Entry%20Pass%20(%E2%82%B91%2C499%2Fmonth)" target="_blank" rel="noopener">Get This Pass →</a>
     </div>
     <div class="mem-card pass-standard reveal reveal-d1">
-      <div class="mem-pass-name">Standard Pass</div><div class="mem-pass-badge">Popular</div>
+      <h3 class="mem-pass-name">Standard Pass</h3><div class="mem-pass-badge">Popular</div>
       <div class="mem-price-row"><span class="mem-price">₹2,199</span><span class="mem-price-label">/ month</span></div>
       <div class="mem-hours-row">36 Hours</div><div class="mem-divider"></div>
       <ul class="mem-features"><li>36 Hours PS5 Play Time</li><li>5 Arena Entries</li><li>Valid for 30 Days</li></ul>
+      <a class="mem-cta" href="https://wa.me/918369769652?text=Hi%2C%20I%27d%20like%20the%20Standard%20Pass%20(%E2%82%B92%2C199%2Fmonth)" target="_blank" rel="noopener">Get This Pass →</a>
     </div>
     <div class="mem-card pass-premium reveal reveal-d2">
-      <div class="mem-pass-name">Premium Pass</div><div class="mem-pass-badge">Value</div>
+      <h3 class="mem-pass-name">Premium Pass</h3><div class="mem-pass-badge">Value</div>
       <div class="mem-price-row"><span class="mem-price">₹2,799</span><span class="mem-price-label">/ month</span></div>
       <div class="mem-hours-row">48 Hours</div><div class="mem-divider"></div>
       <ul class="mem-features"><li>48 Hours PS5 Play Time</li><li>8 Arena Entries</li><li>1 VR Session</li><li>Valid for 45 Days</li></ul>
+      <a class="mem-cta" href="https://wa.me/918369769652?text=Hi%2C%20I%27d%20like%20the%20Premium%20Pass%20(%E2%82%B92%2C799%2Fmonth)" target="_blank" rel="noopener">Get This Pass →</a>
     </div>
     <div class="mem-card pass-ultimate featured reveal">
-      <div class="mem-pass-name">Ultimate Pass</div><div class="mem-pass-badge">★ Best Deal</div>
+      <h3 class="mem-pass-name">Ultimate Pass</h3><div class="mem-pass-badge">★ Best Deal</div>
       <div class="mem-price-row"><span class="mem-price">₹3,999</span><span class="mem-price-label">/ month</span></div>
       <div class="mem-hours-row">100 Hours</div><div class="mem-divider"></div>
       <ul class="mem-features"><li>100 Hours PS5 Play Time</li><li>5 VR Racing Sim Access</li><li>Unlimited Arena Entries</li><li>Valid for 60 Days</li></ul>
+      <a class="mem-cta" href="https://wa.me/918369769652?text=Hi%2C%20I%27d%20like%20the%20Ultimate%20Pass%20(%E2%82%B93%2C999%2Fmonth)" target="_blank" rel="noopener">Get This Pass →</a>
     </div>
     <div class="mem-card pass-rookie reveal reveal-d1">
-      <div class="mem-pass-name">Rookie Pass</div><div class="mem-pass-badge">Sim Focus</div>
+      <h3 class="mem-pass-name">Rookie Pass</h3><div class="mem-pass-badge">Sim Focus</div>
       <div class="mem-price-row"><span class="mem-price">₹2,999</span><span class="mem-price-label">/ month</span></div>
       <div class="mem-hours-row">48 Hours</div><div class="mem-divider"></div>
       <ul class="mem-features"><li>24+ Racing Sim Sessions</li><li>5 VR Racing Access</li><li>PS5 + Arena Combo</li><li>Valid for 30 Days</li></ul>
+      <a class="mem-cta" href="https://wa.me/918369769652?text=Hi%2C%20I%27d%20like%20the%20Rookie%20Pass%20(%E2%82%B92%2C999%2Fmonth)" target="_blank" rel="noopener">Get This Pass →</a>
     </div>
     <div class="mem-card pass-padlock reveal reveal-d2">
-      <div class="mem-pass-name">Padlock Pass</div><div class="mem-pass-badge">Pro</div>
-      <div class="mem-price-row"><span class="mem-price" style="font-size:1.4rem;align-self:center">Contact Us</span></div>
+      <h3 class="mem-pass-name">Padlock Pass</h3><div class="mem-pass-badge">Pro</div>
+      <div class="mem-price-row"><span class="mem-price mem-price--text">Contact Us</span></div>
       <div class="mem-hours-row">360 Hours</div><div class="mem-divider"></div>
-      <ul class="mem-features"><li>360 Racing Sim Access</li><li>Full VR Racing Bundle</li><li>Priority Booking</li><li>DM on Instagram for pricing</li></ul>
+      <ul class="mem-features"><li>360 Racing Sim Access</li><li>Full VR Racing Bundle</li><li>Priority Booking</li></ul>
+      <a class="mem-cta" href="https://www.instagram.com/thematrixgamingarena/" target="_blank" rel="noopener">DM for Pricing →</a>
     </div>
   </div>
 </section>
@@ -1261,12 +1317,12 @@
   <div class="rev-header">
     <div>
       <div class="section-label reveal">Reviews</div>
-      <div class="section-heading reveal reveal-d1">WHAT PLAYERS SAY</div>
+      <h2 class="section-heading reveal reveal-d1">WHAT PLAYERS SAY</h2>
     </div>
     <div class="rev-summary reveal reveal-d2">
       <div class="rev-summary-score">5.0</div>
       <div>
-        <div class="rev-summary-stars">★★★★★</div>
+        <div class="rev-summary-stars" role="img" aria-label="Rated 5 out of 5 stars">★★★★★</div>
         <div class="rev-summary-meta"><span data-count="55">0</span> Reviews on Google</div>
       </div>
     </div>
@@ -1284,7 +1340,7 @@
         </div>
         <span class="rev-g"><svg width="18" height="18"><use href="#gicon"/></svg></span>
       </div>
-      <div class="rev-stars">★★★★★</div>
+      <div class="rev-stars" role="img" aria-label="Rated 5 out of 5 stars">★★★★★</div>
       <p class="rev-text">Had a really fun experience. The place was clean, well-maintained, and had a great vibe overall. The games were exciting, the setup was smooth, and the staff was friendly and helpful. A perfect spot to chill with friends.</p>
     </div>
 
@@ -1298,7 +1354,7 @@
         </div>
         <span class="rev-g"><svg width="18" height="18"><use href="#gicon"/></svg></span>
       </div>
-      <div class="rev-stars">★★★★★</div>
+      <div class="rev-stars" role="img" aria-label="Rated 5 out of 5 stars">★★★★★</div>
       <p class="rev-text">Best gaming experience in Kharghar. Best PS5 experience, incredible sim-racing kits, and a very chill atmosphere. Everything from the lighting to the seat comfort is well thought out. A must-visit.</p>
     </div>
 
@@ -1312,49 +1368,49 @@
         </div>
         <span class="rev-g"><svg width="18" height="18"><use href="#gicon"/></svg></span>
       </div>
-      <div class="rev-stars">★★★★★</div>
+      <div class="rev-stars" role="img" aria-label="Rated 5 out of 5 stars">★★★★★</div>
       <p class="rev-text">Absolutely loved this place! 🎮 From PlayStation gaming to the VR setup and simulators, everything was top-notch. Great atmosphere, smooth gaming experience, and perfect for hanging out with friends. Can't wait to visit again!</p>
     </div>
 
     <div class="rev-card reveal">
       <div class="rev-quote">&ldquo;</div>
       <div class="rev-card-top">
-        <div class="rev-avatar" style="background:#eab308">KP</div>
+        <div class="rev-avatar" style="background:#00d9d0">KP</div>
         <div>
           <div class="rev-name">Kajal Patil</div>
           <div class="rev-meta-tags"><span class="rev-date">4 weeks ago</span></div>
         </div>
         <span class="rev-g"><svg width="18" height="18"><use href="#gicon"/></svg></span>
       </div>
-      <div class="rev-stars">★★★★★</div>
+      <div class="rev-stars" role="img" aria-label="Rated 5 out of 5 stars">★★★★★</div>
       <p class="rev-text">Visited many gaming cafes before but this place genuinely stands out. The PlayStation setup is super smooth with big screens, comfortable seating, and almost no lag at all. The atmosphere feels premium.</p>
     </div>
 
     <div class="rev-card reveal reveal-d1">
       <div class="rev-quote">&ldquo;</div>
       <div class="rev-card-top">
-        <div class="rev-avatar" style="background:#ef4444">SB</div>
+        <div class="rev-avatar" style="background:#5b8cff">SB</div>
         <div>
           <div class="rev-name">Sanskrita Bharadwaj</div>
           <div class="rev-meta-tags"><span class="rev-date">4 weeks ago</span></div>
         </div>
         <span class="rev-g"><svg width="18" height="18"><use href="#gicon"/></svg></span>
       </div>
-      <div class="rev-stars">★★★★★</div>
+      <div class="rev-stars" role="img" aria-label="Rated 5 out of 5 stars">★★★★★</div>
       <p class="rev-text">The owners were incredibly sweet, welcoming, and genuinely passionate about what they do. The setup is top-notch — you can feel the care and thought that's gone into every detail.</p>
     </div>
 
     <div class="rev-card reveal reveal-d2">
       <div class="rev-quote">&ldquo;</div>
       <div class="rev-card-top">
-        <div class="rev-avatar" style="background:#f97316">RS</div>
+        <div class="rev-avatar" style="background:#c084fc">RS</div>
         <div>
           <div class="rev-name">Riddhesh Sonawane</div>
           <div class="rev-meta-tags"><span class="rev-date">3 weeks ago</span><span class="rev-new">New</span></div>
         </div>
         <span class="rev-g"><svg width="18" height="18"><use href="#gicon"/></svg></span>
       </div>
-      <div class="rev-stars">★★★★★</div>
+      <div class="rev-stars" role="img" aria-label="Rated 5 out of 5 stars">★★★★★</div>
       <p class="rev-text">I never give reviews but this deserves one — best gaming place in Kharghar and the best customer service I have ever received. Would recommend.</p>
     </div>
 
@@ -1368,7 +1424,7 @@
         </div>
         <span class="rev-g"><svg width="18" height="18"><use href="#gicon"/></svg></span>
       </div>
-      <div class="rev-stars">★★★★★</div>
+      <div class="rev-stars" role="img" aria-label="Rated 5 out of 5 stars">★★★★★</div>
       <p class="rev-text">This place has got everything! From PS5s to VRs to SIMs at the best price available out there. Must VISIT!</p>
     </div>
 
@@ -1382,7 +1438,7 @@
         </div>
         <span class="rev-g"><svg width="18" height="18"><use href="#gicon"/></svg></span>
       </div>
-      <div class="rev-stars">★★★★★</div>
+      <div class="rev-stars" role="img" aria-label="Rated 5 out of 5 stars">★★★★★</div>
       <p class="rev-text">The setup was super smooth, the simulator games felt incredibly realistic, and the VR experience was on another level. The ambience and gaming setup are something else.</p>
     </div>
 
@@ -1396,7 +1452,7 @@
         </div>
         <span class="rev-g"><svg width="18" height="18"><use href="#gicon"/></svg></span>
       </div>
-      <div class="rev-stars">★★★★★</div>
+      <div class="rev-stars" role="img" aria-label="Rated 5 out of 5 stars">★★★★★</div>
       <p class="rev-text">Very good playing here — the staff members were very kind and humble. I came in the morning during happy hours so I got a 35% discount!</p>
     </div>
 
@@ -1405,17 +1461,6 @@
   <!-- animated marquee of shorter reviews -->
   <div class="rev-marquee" aria-hidden="true">
     <div class="rev-marquee-track">
-      <div class="rev-chip"><span class="rev-chip-stars">★★★★★</span><span class="rev-chip-quote">VR Experience was too good 💯</span><span class="rev-chip-name">— Omkar G.</span></div>
-      <div class="rev-chip"><span class="rev-chip-stars">★★★★★</span><span class="rev-chip-quote">Best place for F1 fans, amazing interiors.</span><span class="rev-chip-name">— Kshitij M.</span></div>
-      <div class="rev-chip"><span class="rev-chip-stars">★★★★★</span><span class="rev-chip-quote">The best in-house gaming experience ⚡</span><span class="rev-chip-name">— Neel S.</span></div>
-      <div class="rev-chip"><span class="rev-chip-stars">★★★★★</span><span class="rev-chip-quote">Tried VR and it was lot of fun.</span><span class="rev-chip-name">— Arti S.</span></div>
-      <div class="rev-chip"><span class="rev-chip-stars">★★★★★</span><span class="rev-chip-quote">Amazing place to spend time with friends.</span><span class="rev-chip-name">— Rishav K.</span></div>
-      <div class="rev-chip"><span class="rev-chip-stars">★★★★★</span><span class="rev-chip-quote">My nephew enjoyed a lot. Must visit ❤️</span><span class="rev-chip-name">— Sonal K.</span></div>
-      <div class="rev-chip"><span class="rev-chip-stars">★★★★★</span><span class="rev-chip-quote">Great for VR racing and very affordable.</span><span class="rev-chip-name">— Vinay M.</span></div>
-      <div class="rev-chip"><span class="rev-chip-stars">★★★★★</span><span class="rev-chip-quote">Best gaming arena with aesthetic walls.</span><span class="rev-chip-name">— Kshitij D.</span></div>
-      <div class="rev-chip"><span class="rev-chip-stars">★★★★★</span><span class="rev-chip-quote">Best gamezone in Kharghar 🔥</span><span class="rev-chip-name">— Abhii</span></div>
-      <div class="rev-chip"><span class="rev-chip-stars">★★★★★</span><span class="rev-chip-quote">Best gaming parlour in Kharghar ✌</span><span class="rev-chip-name">— Shrijit B.</span></div>
-      <!-- duplicate set for seamless loop -->
       <div class="rev-chip"><span class="rev-chip-stars">★★★★★</span><span class="rev-chip-quote">VR Experience was too good 💯</span><span class="rev-chip-name">— Omkar G.</span></div>
       <div class="rev-chip"><span class="rev-chip-stars">★★★★★</span><span class="rev-chip-quote">Best place for F1 fans, amazing interiors.</span><span class="rev-chip-name">— Kshitij M.</span></div>
       <div class="rev-chip"><span class="rev-chip-stars">★★★★★</span><span class="rev-chip-quote">The best in-house gaming experience ⚡</span><span class="rev-chip-name">— Neel S.</span></div>
@@ -1443,16 +1488,15 @@
 <div class="ticker dark" aria-hidden="true">
   <div class="ticker-track">
     <span>WALK IN &amp; PLAY</span><span>NO BOOKING NEEDED</span><span>OPEN LATE</span><span>BRING YOUR SQUAD</span><span>FOUNDING 50</span><span>KHARGHAR · NAVI MUMBAI</span>
-    <span>WALK IN &amp; PLAY</span><span>NO BOOKING NEEDED</span><span>OPEN LATE</span><span>BRING YOUR SQUAD</span><span>FOUNDING 50</span><span>KHARGHAR · NAVI MUMBAI</span>
   </div>
 </div>
 
 <!-- ════ SOCIAL ════ -->
 <section id="social">
-  <div class="social-photo"><img src="images/neon.jpg" alt="The Matrix Gaming Arena"/></div>
+  <div class="social-photo"><img src="images/neon.jpg" alt="The Matrix Gaming Arena" loading="lazy" decoding="async"/></div>
   <div class="social-content">
     <div class="social-eyebrow">Follow · Like · Share</div>
-    <div class="social-heading">STAY IN<br/>THE LOOP</div>
+    <h2 class="social-heading">STAY IN<br/>THE LOOP</h2>
     <p class="social-sub">Drops, events, tournaments and highlights from inside the arena — all on our Instagram. Follow to be the first to know.</p>
     <a href="https://www.instagram.com/thematrixgamingarena/" target="_blank" rel="noopener" class="btn-ig">
       <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
@@ -1496,20 +1540,29 @@
     const fill = document.getElementById('preFill');
     const count = document.getElementById('preCount');
     const pre = document.getElementById('preloader');
-    let p = 0;
+    let p = 0, finished = false;
+    let loaded = document.readyState === 'complete';
+    window.addEventListener('load', () => { loaded = true; });
     const tick = setInterval(() => {
-      p += Math.random() * 14 + 6;
+      p += loaded ? 25 : Math.random() * 8 + 4;   // sprint to 100 once assets are actually in
       if (p >= 100) { p = 100; clearInterval(tick); finish(); }
       fill.style.width = p + '%';
       count.textContent = Math.floor(p) + '%';
-    }, 130);
+    }, 80);
+    setTimeout(() => {   // hard cap — never hold the page longer than this
+      clearInterval(tick);
+      fill.style.width = '100%'; count.textContent = '100%';
+      finish();
+    }, 2500);
     function finish() {
+      if (finished) return;
+      finished = true;
       setTimeout(() => {
         pre.classList.add('done');
         document.body.classList.remove('loading');
         startHero();
         setTimeout(() => pre.remove(), 1000);
-      }, 350);
+      }, 250);
     }
   })();
 
@@ -1529,9 +1582,13 @@
     bottom.style.opacity = '1'; bottom.style.transform = 'none';
 
     const slides = document.querySelectorAll('.hero-slide');
+    slides.forEach(s => { if (s.dataset.bg) s.style.backgroundImage = `url('${s.dataset.bg}')`; });
     if (slides.length > 1) {
-      let idx = 0;
+      let idx = 0, heroOn = true;
+      new IntersectionObserver(es => { heroOn = es[0].isIntersecting; })
+        .observe(document.getElementById('hero'));
       setInterval(() => {
+        if (!heroOn || document.hidden) return;   // don't swap slides nobody can see
         slides[idx].classList.remove('active');
         idx = (idx + 1) % slides.length;
         slides[idx].classList.add('active');
@@ -1549,11 +1606,17 @@
       mx = e.clientX; my = e.clientY;
       cur.style.transform = `translate(${mx}px,${my}px) translate(-50%,-50%)`;
     });
-    (function loop() {
+    let ringRaf;
+    function ringLoop() {
       rx += (mx - rx) * .15; ry += (my - ry) * .15;
       ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%)`;
-      requestAnimationFrame(loop);
-    })();
+      ringRaf = requestAnimationFrame(ringLoop);
+    }
+    ringRaf = requestAnimationFrame(ringLoop);
+    document.addEventListener('visibilitychange', () => {
+      cancelAnimationFrame(ringRaf);
+      if (!document.hidden) ringRaf = requestAnimationFrame(ringLoop);
+    });
     document.querySelectorAll('a, button, .game-card, .exp-panel').forEach(el => {
       el.addEventListener('mouseenter', () => {
         cur.style.width = '18px'; cur.style.height = '18px';
@@ -1569,12 +1632,12 @@
   })();
 
   // ── TABS
-  function showTab(name, btn) {
+  document.querySelectorAll('.ptab').forEach(btn => btn.addEventListener('click', () => {
     document.querySelectorAll('.price-panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
-    document.getElementById('tab-' + name).classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
     btn.classList.add('active');
-  }
+  }));
 
   // ── SCROLL REVEAL
   const revObs = new IntersectionObserver((entries) => {
@@ -1591,7 +1654,7 @@
     const obs = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) {
-          words.forEach((w, i) => setTimeout(() => w.classList.add('lit'), i * 45));
+          words.forEach((w, i) => setTimeout(() => w.classList.add('lit'), i * 60));
           obs.disconnect();
         }
       });
@@ -1602,11 +1665,13 @@
   // ── COUNT-UP numbers
   (function () {
     const nums = document.querySelectorAll('[data-count]');
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const obs = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) {
           const el = e.target;
           const target = +el.dataset.count;
+          if (reduced) { el.textContent = target; obs.unobserve(el); return; }
           let cur = 0;
           const step = Math.max(1, Math.floor(target / 40));
           const t = setInterval(() => {
@@ -1623,6 +1688,7 @@
 
   // ── PARALLAX on experience photos
   (function () {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const imgs = document.querySelectorAll('.exp-panel-photo img');
     let ticking = false;
     window.addEventListener('scroll', () => {
@@ -1634,7 +1700,8 @@
           const r = img.getBoundingClientRect();
           if (r.bottom > 0 && r.top < vh) {
             const prog = (r.top + r.height / 2 - vh / 2) / vh;
-            img.style.transform = `scale(1.12) translateY(${prog * -22}px)`;
+            // custom property only — the CSS keeps ownership of transform/scale so hover zoom still works
+            img.style.setProperty('--py', (prog * -22) + 'px');
           }
         });
         ticking = false;
@@ -1721,7 +1788,7 @@
       let tick = false;
       function upd() {
         const max = document.documentElement.scrollHeight - window.innerHeight;
-        bar.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + '%';
+        bar.style.transform = `scaleX(${max > 0 ? window.scrollY / max : 0})`;
         tick = false;
       }
       window.addEventListener('scroll', () => { if (!tick) { tick = true; requestAnimationFrame(upd); } }, { passive: true });
@@ -1797,24 +1864,32 @@
 
     // ── 4. MAGNETIC BUTTONS (desktop only)
     if (fine && !reduced) document.querySelectorAll('.btn-primary, .btn-outline, .nav-cta, .btn-google, .btn-ig, .garrow').forEach(btn => {
+      // pointer-follow must not be tweened through the button's own hover transition
+      btn.addEventListener('mouseenter', () => {
+        btn.style.transition = 'transform .08s linear, box-shadow var(--t-fast), background var(--t-fast), color var(--t-fast), border-color var(--t-fast)';
+      });
       btn.addEventListener('mousemove', e => {
         const r = btn.getBoundingClientRect();
         const mx = e.clientX - r.left - r.width / 2;
         const my = e.clientY - r.top - r.height / 2;
         btn.style.transform = `translate(${mx * 0.22}px, ${my * 0.3}px)`;
       });
-      btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+      btn.addEventListener('mouseleave', () => { btn.style.transition = ''; btn.style.transform = ''; });
     });
 
     // ── 5. 3D TILT on contained cards (desktop only; skips full-bleed panels)
     if (fine && !reduced) document.querySelectorAll('.game-card:not(.game-more), .mem-card, .rev-card').forEach(card => {
+      // tilt tracks the pointer directly; the card's own transform transition would make it lag
+      card.addEventListener('mouseenter', () => {
+        card.style.transition = 'transform .06s linear, background var(--t-fast), border-color var(--t-fast)';
+      });
       card.addEventListener('mousemove', e => {
         const r = card.getBoundingClientRect();
         const px = (e.clientX - r.left) / r.width - 0.5;
         const py = (e.clientY - r.top) / r.height - 0.5;
         card.style.transform = `perspective(700px) rotateX(${(-py * 5).toFixed(2)}deg) rotateY(${(px * 5).toFixed(2)}deg) translateY(-6px)`;
       });
-      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+      card.addEventListener('mouseleave', () => { card.style.transition = ''; card.style.transform = ''; });
     });
   })();
 
@@ -1822,6 +1897,10 @@
   (function () {
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    // seamless-loop content is cloned here instead of hand-duplicated in the HTML
+    document.querySelectorAll('.ticker-track, .rev-marquee-track')
+      .forEach(t => { t.innerHTML += t.innerHTML; });
 
     // ── IMAGE WIPE REVEALS (clip-path) — works even under reduced (CSS no-ops it)
     const io = new IntersectionObserver(es => es.forEach(e => {
@@ -1839,16 +1918,24 @@
           label.style.left = e.clientX + 'px';
           label.style.top = (e.clientY - 36) + 'px';
         });
-        [['.game-card:not(.game-more)', 'Play'], ['.exp-panel', 'Explore']].forEach(([sel, txt]) =>
-          document.querySelectorAll(sel).forEach(el => {
-            el.addEventListener('mouseenter', () => { label.textContent = txt; label.classList.add('show'); });
-            el.addEventListener('mouseleave', () => label.classList.remove('show'));
-          }));
+        // game cards aren't clickable — show the platform instead of promising "Play"
+        document.querySelectorAll('.game-card:not(.game-more)').forEach(el => {
+          el.addEventListener('mouseenter', () => {
+            const platform = el.querySelector('.game-card-platform');
+            label.textContent = platform ? platform.textContent : 'PS5';
+            label.classList.add('show');
+          });
+          el.addEventListener('mouseleave', () => label.classList.remove('show'));
+        });
+        document.querySelectorAll('.exp-panel').forEach(el => {
+          el.addEventListener('mouseenter', () => { label.textContent = 'Explore'; label.classList.add('show'); });
+          el.addEventListener('mouseleave', () => label.classList.remove('show'));
+        });
       }
     }
 
     // ── MASTER rAF LOOP: velocity marquees + hero parallax + kinetic divider
-    const tracks = [...document.querySelectorAll('.ticker-track, .rev-marquee-track')].map((t, i) => {
+    const tracks = [...document.querySelectorAll('.ticker-track, .rev-marquee-track')].map(t => {
       t.style.animation = 'none';
       return { el: t, x: 0, half: 1, dir: t.classList.contains('rev-marquee-track') ? 1 : -1 };
     });
@@ -1857,11 +1944,18 @@
     window.addEventListener('load', measure);
     window.addEventListener('resize', measure);
 
+    // only animate what's actually on screen
+    const inView = new Set();
+    const vis = new IntersectionObserver(es => es.forEach(e =>
+      e.isIntersecting ? inView.add(e.target) : inView.delete(e.target)));
+    tracks.forEach(s => vis.observe(s.el));
+
     const hero = document.getElementById('hero');
     const media = hero && hero.querySelector('.hero-media');
     const content = hero && hero.querySelector('.hero-content');
     const kBand = document.querySelector('.kinetic-band');
     const kText = document.getElementById('kineticText');
+    if (kBand) vis.observe(kBand);
 
     let lastY = window.scrollY, vel = 0;
     window.addEventListener('scroll', () => { const y = window.scrollY; vel = y - lastY; lastY = y; }, { passive: true });
@@ -1872,6 +1966,7 @@
       const skew = Math.max(-7, Math.min(7, sv * 0.25));
       const boost = Math.min(Math.abs(sv) * 0.12, 7);
       tracks.forEach(s => {
+        if (!inView.has(s.el)) return;
         s.x += (BASE + boost) * s.dir;
         s.x = s.x % s.half; if (s.x > 0) s.x -= s.half;
         s.el.style.transform = `translateX(${s.x}px) skewX(${skew}deg)`;
@@ -1886,16 +1981,20 @@
         }
       }
 
-      if (kBand && kText) {
+      if (kBand && kText && inView.has(kBand)) {
         const r = kBand.getBoundingClientRect(), vh = window.innerHeight;
         if (r.top < vh && r.bottom > 0) {
           const prog = (vh - r.top) / (vh + r.height);
           kText.style.transform = `translateX(${(0.06 - prog * 0.2) * 100}%)`;
         }
       }
-      requestAnimationFrame(loop);
+      rafId = requestAnimationFrame(loop);
     }
-    requestAnimationFrame(loop);
+    let rafId = requestAnimationFrame(loop);
+    document.addEventListener('visibilitychange', () => {
+      cancelAnimationFrame(rafId);
+      if (!document.hidden) rafId = requestAnimationFrame(loop);
+    });
   })();
 </script>
 
