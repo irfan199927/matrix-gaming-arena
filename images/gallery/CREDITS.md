@@ -14,4 +14,4 @@ Resized and converted to WebP for the site.
 | dualsense.webp | User_Pascal | https://unsplash.com/photos/uVPY0FyQ96s |
 | crew.webp | Stem List | https://unsplash.com/photos/ryRU-cd1yas |
 
-Game covers in ../games/*.webp are official store art from each game's Steam page (publisher marketing art, not separately licensed).
+Game covers in ../games/*.webp are official publisher marketing art (Steam store pages; Fortnite from the Epic Games Store; UFC 6 cropped from its PlayStation Store key art). Not separately licensed.
