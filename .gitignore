@@ -13,3 +13,6 @@ workflows/
 images/games/README.txt
 matrix-gaming-arena-reviews.md
 matrix-gaming-arena-reviews.html
+
+# Local editor / Claude Code settings
+.claude/
