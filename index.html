@@ -409,6 +409,41 @@
     }
     .note { margin-top: 22px; color: var(--muted); }
 
+    /* ═══ GAMES (cover rail) ═══ */
+    .games-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 24px; }
+    .games-head .lede { max-width: 38ch; }
+    .rail { display: flex; gap: clamp(14px, 1.6vw, 22px); margin: 50px calc(var(--pad) * -1) 0; padding: 10px var(--pad) 26px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--pad); list-style: none; scrollbar-width: thin; scrollbar-color: var(--green-deep) var(--ink-2); }
+    .rail:focus-visible { outline-offset: -2px; }
+    .game { flex: 0 0 clamp(150px, 17vw, 230px); scroll-snap-align: start; }
+    .game-cover { position: relative; aspect-ratio: 2 / 3; overflow: hidden; background: var(--surface); box-shadow: 0 0 0 1px var(--line); transition: transform .5s var(--ease), box-shadow .5s var(--ease); }
+    .game-cover img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease); }
+    .game:hover .game-cover { transform: translateY(-6px); box-shadow: 0 0 0 1px var(--green), 0 18px 40px -12px rgba(61,255,143,.45); }
+    .game:hover .game-cover img { transform: scale(1.05); }
+    .game-cover--type { display: grid; align-content: end; padding: 18px; background: radial-gradient(120% 80% at 80% 0%, rgba(61,255,143,.28), transparent 60%), linear-gradient(160deg, var(--surface), var(--ink-2)); }
+    .game-cover--type b { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: clamp(2rem, 3.4vw, 3rem); line-height: .88; }
+    .game-cover--type::before { content: ''; position: absolute; top: 18px; left: 18px; width: 22px; height: 15px; background: var(--green); clip-path: polygon(0 0, 100% 0, 50% 100%); filter: drop-shadow(0 0 6px var(--green)); }
+    .game-cover--more { background: var(--green); color: var(--on-green); text-decoration: none; }
+    .game-cover--more::before { background: var(--on-green); filter: none; }
+    .game-cover--more b { color: var(--on-green); }
+    .game p { margin-top: 12px; font-weight: 600; line-height: 1.25; }
+    .game .mono { display: block; margin-top: 4px; color: var(--muted); font-size: .7rem; }
+    .game.fade { transition-delay: calc(var(--i, 0) * 60ms); }
+
+    /* ═══ GALLERY (mood mosaic) ═══ */
+    .gallery { padding: 0 var(--pad) clamp(90px, 13vw, 180px); }
+    .gallery-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px 24px; margin-bottom: 26px; }
+    .gallery-head h2 { font-size: clamp(2.4rem, 6vw, 4.6rem); }
+    .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 42vw; grid-auto-flow: dense; gap: 10px; }
+    @media (min-width: 760px) { .gallery-grid { grid-template-columns: repeat(4, 1fr); grid-auto-rows: clamp(170px, 19vw, 330px); gap: 14px; } }
+    .tile { position: relative; overflow: hidden; margin: 0; background: var(--surface); clip-path: inset(8% 6% 8% 6%); opacity: 0; transition: clip-path 1.2s var(--ease), opacity .8s var(--ease); transition-delay: calc(var(--i, 0) * 70ms); }
+    .tile.in { clip-path: inset(0 0 0 0); opacity: 1; }
+    .tile img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.55) contrast(1.08) brightness(.85); transform: scale(1.06); transition: filter .7s var(--ease), transform 1.2s var(--ease); }
+    .tile::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(0deg, rgba(7,16,12,.55), transparent 45%), rgba(61,255,143,.12); mix-blend-mode: normal; transition: opacity .7s var(--ease); }
+    .tile:hover img { filter: none; transform: scale(1); }
+    .tile:hover::after { opacity: 0; }
+    .tile--tall { grid-row: span 2; }
+    .tile--wide { grid-column: span 2; }
+
     /* ═══ REVIEWS ═══ */
     .reviews-grid { display: grid; gap: 48px; margin-top: 50px; }
     @media (min-width: 900px) { .reviews-grid { grid-template-columns: 300px minmax(0, 1fr); } }
@@ -466,7 +501,7 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { transition-duration: .01ms !important; transition-delay: 0s !important; animation: none !important; }
       .hero-title .ch, .lines .ln > span, .fade, .hero-bottom { transform: none !important; opacity: 1 !important; }
-      .level-media { clip-path: none !important; }
+      .level-media, .tile { clip-path: none !important; opacity: 1 !important; }
     }
   </style>
 </head>
@@ -518,7 +553,8 @@
     <li><a href="#levels"><span class="mono green">01</span><span class="menu-label">Levels</span><span class="menu-note">Four ways to play</span></a></li>
     <li><a href="#rates"><span class="mono green">02</span><span class="menu-label">Rates</span><span class="menu-note">Pay per station</span></a></li>
     <li><a href="#passes"><span class="mono green">03</span><span class="menu-label">Passes</span><span class="menu-note">For regulars</span></a></li>
-    <li><a href="#visit"><span class="mono green">04</span><span class="menu-label">Visit</span><span class="menu-note">Hours, directions, FAQ</span></a></li>
+    <li><a href="#games"><span class="mono green">04</span><span class="menu-label">Games</span><span class="menu-note">On the shelf</span></a></li>
+    <li><a href="#visit"><span class="mono green">05</span><span class="menu-label">Visit</span><span class="menu-note">Hours, directions, FAQ</span></a></li>
   </ol>
   <div class="menu-foot">
     <a class="btn" href="https://wa.me/918369769652?text=Hi%2C%20I%27d%20like%20to%20book%20a%20station" target="_blank" rel="noopener">Book a station <svg aria-hidden="true"><use href="#i-up"/></svg></a>
@@ -687,6 +723,27 @@
     <p class="note mono">Tap a pass to buy it on WhatsApp</p>
   </section>
 
+  <!-- ═══ GAMES ═══ -->
+  <section class="sec" id="games" aria-labelledby="games-title" style="padding-bottom:clamp(60px, 8vw, 110px)">
+    <p class="sec-label mono fade">05 <span>/ On the shelf</span></p>
+    <div class="games-head">
+      <h2 class="big display lines" id="games-title"><span class="ln"><span>Pick your</span></span><span class="ln"><span class="outline">game.</span></span></h2>
+      <p class="lede fade">The big releases, installed and updated. Don't see yours? Ask on WhatsApp, we add new titles all the time.</p>
+    </div>
+    <ul class="rail" tabindex="0" aria-label="Games available, scroll sideways for more">
+      <li class="game fade" style="--i:0"><div class="game-cover"><img src="images/games/fc25.webp" alt="" width="600" height="900" loading="lazy"/></div><p>EA Sports FC 25</p><span class="mono">PS5 · up to 4 players</span></li>
+      <li class="game fade" style="--i:1"><div class="game-cover"><img src="images/games/gta5.webp" alt="" width="600" height="900" loading="lazy"/></div><p>GTA V</p><span class="mono">PS5</span></li>
+      <li class="game fade" style="--i:2"><div class="game-cover"><img src="images/games/tekken8.webp" alt="" width="600" height="900" loading="lazy"/></div><p>Tekken 8</p><span class="mono">PS5 · 1v1</span></li>
+      <li class="game fade" style="--i:3"><div class="game-cover game-cover--type" aria-hidden="true"><b>Gran<br/>Turismo<br/>7</b></div><p>Gran Turismo 7</p><span class="mono">Sim rig · PSVR2</span></li>
+      <li class="game fade" style="--i:4"><div class="game-cover"><img src="images/games/cod.webp" alt="" width="600" height="900" loading="lazy"/></div><p>Call of Duty</p><span class="mono">PS5</span></li>
+      <li class="game fade" style="--i:5"><div class="game-cover"><img src="images/games/mk1.webp" alt="" width="600" height="900" loading="lazy"/></div><p>Mortal Kombat 1</p><span class="mono">PS5 · 1v1</span></li>
+      <li class="game fade" style="--i:6"><div class="game-cover"><img src="images/games/spiderman2.webp" alt="" width="600" height="900" loading="lazy"/></div><p>Marvel's Spider-Man 2</p><span class="mono">PS5</span></li>
+      <li class="game fade" style="--i:7"><div class="game-cover"><img src="images/games/gowr.webp" alt="" width="600" height="900" loading="lazy"/></div><p>God of War Ragnarök</p><span class="mono">PS5</span></li>
+      <li class="game fade" style="--i:8"><div class="game-cover game-cover--type" aria-hidden="true"><b>Fort<br/>nite</b></div><p>Fortnite</p><span class="mono">PS5</span></li>
+      <li class="game fade" style="--i:9"><a class="game-cover game-cover--type game-cover--more" href="https://wa.me/918369769652?text=Hi%2C%20which%20games%20do%20you%20have%3F" target="_blank" rel="noopener"><b>And<br/>more</b></a><p>Ask what's installed</p><span class="mono">WhatsApp</span></li>
+    </ul>
+  </section>
+
   <div class="marquee marquee--big" aria-label="Games available: EA Sports FC 25, Tekken 8, GTA V, Gran Turismo 7, Call of Duty, Mortal Kombat 1, Spider-Man 2, God of War Ragnarök, Fortnite and more">
     <div class="marquee-track" aria-hidden="true">
       <span>EA FC 25</span><span>Tekken 8</span><span>GTA V</span><span>Gran Turismo 7</span><span>Call of Duty</span><span>Mortal Kombat 1</span><span>Spider-Man 2</span><span>God of War</span><span>Fortnite</span><span>And more</span>
@@ -696,7 +753,7 @@
 
   <!-- ═══ REVIEWS ═══ -->
   <section class="sec" id="reviews" aria-labelledby="reviews-title">
-    <p class="sec-label mono fade">05 <span>/ Player reviews</span></p>
+    <p class="sec-label mono fade">06 <span>/ Player reviews</span></p>
     <h2 class="big display lines" id="reviews-title"><span class="ln"><span>Don't take</span></span><span class="ln"><span>our word.</span></span></h2>
     <div class="reviews-grid">
       <div class="score fade">
@@ -713,9 +770,27 @@
     </div>
   </section>
 
+  <!-- ═══ GALLERY ═══ -->
+  <section class="gallery" id="gallery" aria-labelledby="gallery-title">
+    <div class="gallery-head">
+      <h2 class="display fade" id="gallery-title">Game nights <span class="green">hit different.</span></h2>
+      <p class="mono fade" style="color:var(--muted)">Headsets on. Volume up.</p>
+    </div>
+    <div class="gallery-grid">
+      <figure class="tile tile--tall" style="--i:0"><img src="images/gallery/vr-neon.webp" alt="A player in a VR headset swinging motion controllers under purple light" width="1009" height="1400" loading="lazy"/></figure>
+      <figure class="tile tile--wide" style="--i:1"><img src="images/gallery/esports-chair.webp" alt="A gamer in a headset and gaming chair facing a glowing screen" width="1400" height="933" loading="lazy"/></figure>
+      <figure class="tile" style="--i:2"><img src="images/gallery/pad-blue.webp" alt="A controller glowing blue in a dark room" width="1400" height="964" loading="lazy"/></figure>
+      <figure class="tile" style="--i:3"><img src="images/gallery/sim-racing.webp" alt="A driver gripping a racing wheel on a sim rig" width="1400" height="933" loading="lazy"/></figure>
+      <figure class="tile" style="--i:4"><img src="images/gallery/game-on.webp" alt="A neon sign that reads Game On" width="1400" height="933" loading="lazy"/></figure>
+      <figure class="tile" style="--i:5"><img src="images/gallery/vr-dark.webp" alt="A VR headset on a player half lit in the dark" width="1400" height="788" loading="lazy"/></figure>
+      <figure class="tile tile--wide" style="--i:6"><img src="images/gallery/crew.webp" alt="Friends side by side, locked into a match" width="1400" height="788" loading="lazy"/></figure>
+      <figure class="tile tile--wide" style="--i:7"><img src="images/gallery/dualsense.webp" alt="Close-up of a white PS5 DualSense controller" width="1400" height="933" loading="lazy"/></figure>
+    </div>
+  </section>
+
   <!-- ═══ VISIT ═══ -->
   <section class="sec" id="visit" aria-labelledby="visit-title" style="border-top:1px solid var(--line)">
-    <p class="sec-label mono fade">06 <span>/ Before you play</span></p>
+    <p class="sec-label mono fade">07 <span>/ Before you play</span></p>
     <h2 class="big display lines" id="visit-title"><span class="ln"><span>Find the</span></span><span class="ln"><span class="green">arena.</span></span></h2>
     <div class="visit-grid">
       <div class="info fade">
@@ -955,7 +1030,7 @@
     e.target.classList.add('in'); io.unobserve(e.target);
     e.target.querySelectorAll?.('[data-count]').forEach(count);
   }), { rootMargin: '0px 0px -12% 0px' });
-  $$('.lines, .fade, .level').forEach(el => io.observe(el));
+  $$('.lines, .fade, .level, .tile').forEach(el => io.observe(el));
 
   function count(el) {
     const to = +el.dataset.count, dec = +(el.dataset.dec || 0);
