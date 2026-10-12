@@ -429,22 +429,6 @@
     .game .mono { display: block; margin-top: 4px; color: var(--muted); font-size: .7rem; }
     .game.fade { transition-delay: calc(var(--i, 0) * 60ms); }
 
-    /* ═══ GALLERY (mood mosaic) ═══ */
-    .gallery { padding: 0 var(--pad) clamp(90px, 13vw, 180px); }
-    .gallery-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px 24px; margin-bottom: 26px; }
-    .gallery-head h2 { font-size: clamp(2.4rem, 6vw, 4.6rem); }
-    .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 42vw; grid-auto-flow: dense; gap: 10px; }
-    @media (min-width: 760px) { .gallery-grid { grid-template-columns: repeat(4, 1fr); grid-auto-rows: clamp(170px, 19vw, 330px); gap: 14px; } }
-    .tile { position: relative; overflow: hidden; margin: 0; background: var(--surface); clip-path: inset(8% 6% 8% 6%); opacity: 0; transition: clip-path 1.2s var(--ease), opacity .8s var(--ease); transition-delay: calc(var(--i, 0) * 70ms); }
-    .tile.in { clip-path: inset(0 0 0 0); opacity: 1; }
-    .tile img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.06); transition: transform 1.2s var(--ease); }
-    .tile.in img { transform: scale(1); }
-    .tile::after { content: ''; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(230,238,227,.06); background: linear-gradient(0deg, rgba(7,16,12,.35), transparent 35%); transition: opacity .6s var(--ease); }
-    .tile:hover img { transform: scale(1.04); }
-    .tile:hover::after { opacity: 0; }
-    .tile--tall { grid-row: span 2; }
-    .tile--wide { grid-column: span 2; }
-
     /* ═══ REVIEWS ═══ */
     .reviews-grid { display: grid; gap: 48px; margin-top: 50px; }
     @media (min-width: 900px) { .reviews-grid { grid-template-columns: 300px minmax(0, 1fr); } }
@@ -502,7 +486,7 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { transition-duration: .01ms !important; transition-delay: 0s !important; animation: none !important; }
       .hero-title .ch, .lines .ln > span, .fade, .hero-bottom { transform: none !important; opacity: 1 !important; }
-      .level-media, .tile { clip-path: none !important; opacity: 1 !important; }
+      .level-media { clip-path: none !important; }
     }
   </style>
 </head>
@@ -771,24 +755,6 @@
     </div>
   </section>
 
-  <!-- ═══ GALLERY ═══ -->
-  <section class="gallery" id="gallery" aria-labelledby="gallery-title">
-    <div class="gallery-head">
-      <h2 class="display fade" id="gallery-title">Game nights <span class="green">hit different.</span></h2>
-      <p class="mono fade" style="color:var(--muted)">Headsets on. Volume up.</p>
-    </div>
-    <div class="gallery-grid">
-      <figure class="tile tile--tall" style="--i:0"><img src="images/gallery/psvr-arcade.webp" alt="A player in a PlayStation VR headset under neon arcade lights" width="933" height="1400" loading="lazy"/></figure>
-      <figure class="tile tile--wide" style="--i:1"><img src="images/gallery/f1-sim-rigs.webp" alt="A row of F1 racing simulator rigs glowing under neon lights" width="1400" height="933" loading="lazy"/></figure>
-      <figure class="tile" style="--i:2"><img src="images/gallery/ps-setup.webp" alt="A PlayStation gaming setup with glowing controller-symbol lights" width="1400" height="1187" loading="lazy"/></figure>
-      <figure class="tile" style="--i:3"><img src="images/gallery/ps5-neon.webp" alt="A PS5 and DualSense controller in pink and blue light" width="788" height="1400" loading="lazy"/></figure>
-      <figure class="tile" style="--i:4"><img src="images/gallery/sim-wheel.webp" alt="Gloved hands gripping a racing simulator wheel" width="1021" height="1400" loading="lazy"/></figure>
-      <figure class="tile" style="--i:5"><img src="images/gallery/duo-headsets.webp" alt="Two gamers in headsets locked into a match under green light" width="1400" height="933" loading="lazy"/></figure>
-      <figure class="tile tile--wide" style="--i:6"><img src="images/gallery/football-duo.webp" alt="Two players with controllers mid football match on a big screen" width="1400" height="933" loading="lazy"/></figure>
-      <figure class="tile tile--wide" style="--i:7"><img src="images/gallery/dualsense-ps5.webp" alt="Two DualSense controllers resting on a PS5" width="1400" height="788" loading="lazy"/></figure>
-    </div>
-  </section>
-
   <!-- ═══ VISIT ═══ -->
   <section class="sec" id="visit" aria-labelledby="visit-title" style="border-top:1px solid var(--line)">
     <p class="sec-label mono fade">07 <span>/ Before you play</span></p>
@@ -1031,7 +997,7 @@
     e.target.classList.add('in'); io.unobserve(e.target);
     e.target.querySelectorAll?.('[data-count]').forEach(count);
   }), { rootMargin: '0px 0px -12% 0px' });
-  $$('.lines, .fade, .level, .tile').forEach(el => io.observe(el));
+  $$('.lines, .fade, .level').forEach(el => io.observe(el));
 
   function count(el) {
     const to = +el.dataset.count, dec = +(el.dataset.dec || 0);
