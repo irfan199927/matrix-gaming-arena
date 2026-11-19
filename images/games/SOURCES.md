@@ -1,0 +1,20 @@
+# Game art sources
+
+Official publisher marketing art, used to show which games are available to play at the venue. Not separately licensed.
+
+- Covers: `images/games/<slug>.webp` (600×900).
+- Key art: `images/games/art/<slug>.webp` (1600×900) and `<slug>-sm.webp` (800×450), cropped and resized from the source listed.
+- Retrieved 2026-10-31 (GTA VI: 2026-11-19, launch day) from the official store listings: Steam (the app ID is in each URL), PlayStation Store concept 10011247 (UFC 6) and the Epic Games Store `fortnite` product page.
+
+| Slug | Game | Cover source | Key art source |
+|---|---|---|---|
+| fc27 | EA SPORTS FC 27 | Steam `library_capsule_2x`: <https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4080220/81210d536b70c14e4cf9725f3f03d82bf64e5e25/library_capsule_2x.jpg> | Steam `library_hero_2x`: <https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4080220/98909665528dc40a7d43fd3dd6edc8088ed98c44/library_hero_2x.jpg> |
+| gta5 | Grand Theft Auto V | Steam `library_600x900_2x`: <https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/271590/library_600x900_2x.jpg> | Steam `library_hero_2x`: <https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/271590/library_hero_2x.jpg> |
+| tekken8 | TEKKEN 8 | Steam `library_600x900_2x`: <https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1778820/library_600x900_2x.jpg> | Steam `library_hero_2x`: <https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1778820/library_hero_2x.jpg> |
+| ufc6 | EA SPORTS UFC 6 | PS Store `GAMEHUB_COVER_ART` cropped to 2:3, with the PS Store `LOGO` overlaid: <https://image.api.playstation.com/vulcan/ap/rnd/202604/2216/2ddd5851dd8280066f55321705c8e7b62a5b721e26aabee1.png> + <https://image.api.playstation.com/vulcan/ap/rnd/202604/2216/9971cfecad0be3a2d67bb9148d081e7ed8f9e0d0358084e1.png> | PS Store `GAMEHUB_COVER_ART` (full frame): <https://image.api.playstation.com/vulcan/ap/rnd/202604/2216/2ddd5851dd8280066f55321705c8e7b62a5b721e26aabee1.png> |
+| cod | Call of Duty | Steam `library_600x900_2x` (legacy path): <https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1938090/library_600x900_2x.jpg> | Steam `library_hero_2x`: <https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1938090/4138eadd1bb476b0499f6ee7690aba461fdf179c/library_hero_2x.jpg> |
+| mk1 | Mortal Kombat 1 | Steam `library_600x900_2x`: <https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1971870/library_600x900_2x.jpg> | Steam `raw_page_background`: <https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1971870/page_bg_raw.jpg> |
+| spiderman2 | Marvel's Spider-Man 2 | Steam `library_600x900_2x`: <https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2651280/6fa28738ef8cde05390d3f0a9b942185b5763cbd/library_600x900_2x.jpg> | Steam `library_hero_2x`: <https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2651280/064f792bf6582163f276aa5a648107830f858d5e/library_hero_2x.jpg> |
+| gowr | God of War Ragnarök | Steam `library_600x900_2x`: <https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2322010/library_600x900_2x.jpg> | Steam `library_hero_2x`: <https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2322010/8886984a9a1da221a8e043908c6e4918205ef784/library_hero_2x.jpg> |
+| fortnite | Fortnite | Epic Games Store 1200×1600 launcher art: <https://cdn2.unrealengine.com/fnbr-42-00-c7s4-hacking-egs-launcher-blade-1200x1600-1200x1600-0138e7df7bb0.jpg> | Epic Games Store 3840×2160 Battle Royale art, cropped below the wordmark: <https://cdn2.unrealengine.com/fnbr-42-00-c7s4-hacking-br-logo-ps-pdp-coverart-3840x2160-3840x2160-0d7b628f7dc1.jpg> |
+| gta6 | Grand Theft Auto VI | Rockstar Games official artwork page (<https://www.rockstargames.com/VI/downloads/artwork-wallpapers>), "Official Cover Art", portrait size (1080×1920): <https://www.rockstargames.com/VI/_next/static/media/Official_Cover_Art_portrait.0_q101pt77mgu.jpg>, cropped to 2:3 from the top of the artwork. Used as `gta6.webp` (600×900) and `gta6-lg.webp` (1000×1500) in the games-section spotlight | None (cover only) |

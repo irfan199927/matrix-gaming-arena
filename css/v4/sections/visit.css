@@ -1,0 +1,40 @@
+/* V4 section styles: "Pit stop" visit info, live hours and FAQ (owner: Frontend). */
+
+.visit-grid { display: grid; gap: clamp(44px, 6vw, 100px); max-width: var(--max); margin: 0 auto; }
+@media (min-width: 960px) { .visit-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); } }
+
+.info-block { display: grid; gap: 16px; padding: 24px 0 28px; border-top: 1px solid var(--line-2); }
+.info-block > h3 { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; color: var(--fg-2); }
+.info-block > h3 .status-line { color: var(--fg); }
+.info-block address { font-size: clamp(1.35rem, 1rem + 1.1vw, 2rem); font-weight: 640; line-height: 1.16; letter-spacing: -.015em; }
+.info-block .btn { justify-self: start; }
+
+.hours { width: 100%; max-width: 480px; font-variant-numeric: tabular-nums lining-nums; }
+.hours th, .hours td { padding: 10px 0; border-bottom: 1px solid var(--line); }
+.hours th { width: 5em; text-align: left; font-family: var(--f-mono); font-size: .78rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; }
+.hours td { text-align: right; font-weight: 560; }
+.hours tr.today, .hours tr.is-today { background: linear-gradient(90deg, rgb(56 242 74 / .22), transparent 70%); }
+.hours tr.today th, .hours tr.is-today th { padding-left: 10px; box-shadow: inset 3px 0 0 var(--c-green-ink); }
+.hours tr.today td, .hours tr.is-today td { font-weight: 760; }
+.hours tr.today td::after, .hours tr.is-today td::after { content: "Today"; margin-left: 10px; padding: 3px 6px; border-radius: 3px; background: var(--c-ink); color: var(--c-paper); font-family: var(--f-mono); font-size: .6rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; vertical-align: 2px; }
+
+.contact-list { display: grid; gap: 4px; }
+.contact-list a { display: inline-flex; align-items: center; gap: 12px; padding: 7px 0; font-size: clamp(1.1rem, 1rem + .4vw, 1.35rem); font-weight: 620; text-decoration: none; }
+.contact-list a:hover { text-decoration: underline; }
+.contact-list .ic { width: 20px; height: 20px; color: var(--accent); }
+
+.faq-title { margin-bottom: clamp(16px, 2vw, 28px); font-family: var(--f-display); font-weight: 880; text-transform: uppercase; font-size: clamp(2rem, 1.3rem + 2.4vw, 3.6rem); line-height: .86; letter-spacing: -.03em; }
+.faq-title em { font-family: var(--f-serif); font-weight: 400; text-transform: none; letter-spacing: -.01em; color: var(--accent); font-size: 1.12em; line-height: 0; }
+.faq details { border-top: 1px solid var(--line-2); }
+.faq details:last-child { border-bottom: 1px solid var(--line-2); }
+.faq summary {
+  display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 22px 0; cursor: pointer; list-style: none;
+  font-size: clamp(1.12rem, 1rem + .5vw, 1.5rem); font-weight: 650; line-height: 1.2; letter-spacing: -.012em;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary:hover { color: var(--accent); }
+.faq summary i { position: relative; flex: none; width: 34px; height: 34px; border: 1px solid var(--line-2); border-radius: 50%; }
+.faq summary i::before, .faq summary i::after { content: ""; position: absolute; left: 50%; top: 50%; width: 12px; height: 1.5px; background: currentColor; transform: translate(-50%, -50%); transition: transform var(--dur-2) var(--ease-out); }
+.faq summary i::after { transform: translate(-50%, -50%) rotate(90deg); }
+.faq details[open] summary i::after { transform: translate(-50%, -50%) rotate(0deg); }
+.faq details p { max-width: 58ch; padding: 0 0 26px; color: var(--fg-2); font-size: 1.05rem; }

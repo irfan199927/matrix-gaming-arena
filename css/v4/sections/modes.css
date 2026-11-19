@@ -1,0 +1,47 @@
+/* V4 section styles: "Choose your reality" mode cards (owner: Frontend). */
+
+.mode-list { display: grid; gap: 12px; max-width: var(--max); margin: 0 auto; }
+.mode-item { display: grid; }
+.mode {
+  position: relative; display: grid; grid-template-rows: auto minmax(120px, 1fr) auto auto auto auto;
+  min-height: clamp(400px, 60vh, 640px); padding: clamp(18px, 1.8vw, 28px);
+  border: 1px solid var(--line-2); border-radius: var(--r-m); overflow: hidden;
+  color: var(--fg); text-decoration: none; background: rgb(242 244 238 / .1);
+  transition: background-color var(--dur-2) var(--ease-out), color var(--dur-2), border-color var(--dur-2);
+}
+.mode-top { display: flex; justify-content: space-between; gap: 12px; }
+.mode-glyph {
+  width: min(78%, 300px); justify-self: center; align-self: center; margin: 18px 0;
+  fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linejoin: round; stroke-linecap: round;
+  transition: stroke var(--dur-2), transform var(--dur-3) var(--ease-out);
+}
+.mode-glyph * { vector-effect: non-scaling-stroke; }
+.mode-name {
+  font-family: var(--f-display); font-weight: 900; font-stretch: 100%;
+  font-size: clamp(4.2rem, 2rem + 6.2vw, 8.8rem); line-height: .78; letter-spacing: -.045em;
+}
+.mode-serif { margin-top: 10px; font-family: var(--f-serif); font-style: italic; font-size: clamp(1.5rem, 1rem + 1.3vw, 2.4rem); line-height: 1; letter-spacing: -.01em; }
+.mode-meta { margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--line-2); color: var(--fg-2); }
+.mode-price { display: flex; align-items: baseline; gap: .4em; margin-top: 10px; font-weight: 860; font-size: clamp(1.7rem, 1.2rem + 1.1vw, 2.4rem); line-height: 1; letter-spacing: -.025em; font-variant-numeric: tabular-nums; }
+.mode-price small { font-weight: 500; color: var(--fg-2); }
+
+.mode:hover, .mode:focus-visible {
+  --fg: var(--c-paper); --fg-2: #a9b2a5; --line-2: rgb(242 244 238 / .26); --focus: var(--c-green);
+  background: var(--c-dark); border-color: var(--c-dark);
+}
+.mode:hover .mode-glyph, .mode:focus-visible .mode-glyph { stroke: var(--c-green); transform: scale(1.06) rotate(-4deg); }
+.mode:hover .mode-serif, .mode:focus-visible .mode-serif { color: var(--c-green); }
+
+@media (min-width: 900px) {
+  .mode-list { display: flex; gap: 14px; }
+  .mode-item { flex: 1 1 0; min-width: 0; transition: flex-grow var(--dur-3) var(--ease-out); }
+  .mode-item:hover, .mode-item:focus-within { flex-grow: 1.45; }
+}
+@media (max-width: 899px) {
+  .mode { min-height: 0; grid-template-columns: 1fr auto; grid-template-rows: auto auto auto auto auto; column-gap: 12px; }
+  .mode-top { grid-column: 1 / -1; }
+  .mode-glyph { grid-column: 2; grid-row: 2 / 4; width: clamp(96px, 30vw, 180px); margin: 14px 0 0; align-self: start; }
+  .mode-name { grid-column: 1; grid-row: 2; margin-top: 22px; font-size: clamp(4rem, 22vw, 7rem); }
+  .mode-serif { grid-column: 1; grid-row: 3; }
+  .mode-meta, .mode-price { grid-column: 1 / -1; }
+}

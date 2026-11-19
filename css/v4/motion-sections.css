@@ -1,0 +1,78 @@
+/* Section choreography states (owner M2; redesign-docs/v4/00-spec.md §9). Everything is scoped to [data-m2] or to
+   classes the choreography adds, so tier 0, reduced motion and no-JS keep the plain static design. */
+
+/* hero: promote the layers that move on the pin */
+html.motion-on .hero-word { will-change: transform; }
+
+/* THE MATRIX glitch (sections/glitch.js): three copies of the word, laid out like it and shown only during a burst.
+   a/b sit behind the ink as a green and magenta split; tear is an ink slice on a paper band that hides the slice below */
+.glitch-layer {
+  position: absolute; inset: 0; display: inherit; justify-content: inherit; justify-items: inherit; gap: inherit;
+  visibility: hidden; pointer-events: none; user-select: none;
+}
+.glitch-layer--a, .glitch-layer--b { z-index: -1; }
+.glitch-layer--a { color: var(--c-green); }
+.glitch-layer--b { color: #ff3d7f; }
+.glitch-layer--tear { color: var(--c-ink); background: var(--c-paper); }
+.hero-word.is-glitching .glitch-layer { visibility: visible; }
+
+/* message */
+.message-photo[data-m2] img { will-change: clip-path, transform; }
+.marquee[data-m2] { will-change: transform; }
+
+/* modes: one card grows, the others recede; touch press feedback */
+.mode-list.has-active .mode-item:not(.is-active) { opacity: .6; }
+.mode-item { transition: opacity var(--dur-2, .45s) var(--ease-out, ease), flex-grow var(--dur-3, .8s) var(--ease-out, ease), transform var(--dur-2, .45s) var(--ease-out, ease); }
+.mode-list.has-press .mode-item:not(.is-press) { opacity: .7; transform: scale(.985); }
+.mode-item.is-press { transform: scale(.972); }
+
+/* games: lift on hover/focus (colour comes from games.css) */
+.tile-media { transition: translate var(--dur-3, .8s) var(--ease-out, ease); }
+@media (hover: hover) {
+  .tile-link:hover .tile-media, .tile-link:focus-visible .tile-media { translate: 0 -8px; }
+}
+
+/* tach: redline flash */
+@keyframes m2-redline { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+.tach.is-redline .tach-red { animation: m2-redline .22s steps(2, end) infinite; stroke-width: 8; }
+.tach.is-redline .tach-gear { color: var(--c-green); }
+.tach-needle { transition: none; }
+
+/* passes: XP line, tier markers, dimmed until lit */
+.track-xp { margin-left: auto; color: var(--c-green); font-variant-numeric: tabular-nums; }
+.track { --xp: 0; }
+.track::after { content: ""; position: absolute; background: var(--c-green); pointer-events: none; }
+@media (min-width: 900px) {
+  .track::after { left: 0; right: 0; top: 6px; height: 3px; transform-origin: 0 50%; transform: scaleX(var(--xp)); }
+  .pass-track--race .track::after { right: 50%; }
+}
+@media (max-width: 899px) {
+  .track::after { left: 6px; top: 8px; bottom: 8px; width: 3px; transform-origin: 50% 0; transform: scaleY(var(--xp)); }
+}
+.pass[data-m2] > :not(.pass-node) { opacity: .4; transition: opacity var(--dur-3, .8s) var(--ease-out, ease); }
+.pass[data-m2].is-lit > :not(.pass-node) { opacity: 1; }
+.pass[data-m2] .pass-node { transition: background-color .3s, border-color .3s, transform .5s var(--ease-out, ease); }
+.pass[data-m2].is-lit .pass-node { background: var(--c-green); border-color: var(--c-green); transform: scale(1.35); }
+@keyframes m2-pulse { 0% { box-shadow: 0 0 0 0 rgb(56 242 74 / .65); } 100% { box-shadow: 0 0 0 26px rgb(56 242 74 / 0); } }
+.pass.is-pulse .pass-node { animation: m2-pulse 1.1s var(--ease-out, ease) 1; }
+.pass.is-pulse .pass-tag { animation: m2-pulse 1.1s var(--ease-out, ease) 1; }
+
+/* reviews: pointer drag */
+.reviews-track { cursor: grab; }
+.reviews-track.is-drag { cursor: grabbing; scroll-snap-type: none; scroll-behavior: auto; user-select: none; -webkit-user-select: none; }
+.reviews-track.is-drag .review { pointer-events: none; }
+
+/* faq: height is animated by script, so the content must not leak */
+.faq details { overflow: clip; }
+
+/* continue: the "Game on." line and CTA pulse */
+.continue-go { min-height: 1.2em; margin: 0; font-family: var(--f-serif); font-style: italic; font-size: clamp(1.6rem, 1rem + 2vw, 2.8rem); line-height: 1; color: var(--c-green); opacity: 0; transform: translateY(10px); transition: opacity .5s var(--ease-out, ease), transform .6s var(--ease-out, ease); }
+.continue-go.is-on { opacity: 1; transform: none; }
+.countdown-num { transition: color .3s; }
+.countdown-num.is-zero { color: var(--c-green); }
+@keyframes m2-cta { 0% { box-shadow: 0 0 0 0 rgb(56 242 74 / .7); transform: scale(1); } 40% { transform: scale(1.06); } 100% { box-shadow: 0 0 0 34px rgb(56 242 74 / 0); transform: scale(1); } }
+.continue-cta.is-go { animation: m2-cta 1.1s var(--ease-out, ease) 2; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tach.is-redline .tach-red, .pass.is-pulse .pass-node, .pass.is-pulse .pass-tag, .continue-cta.is-go { animation: none; }
+}

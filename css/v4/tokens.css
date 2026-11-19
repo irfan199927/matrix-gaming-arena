@@ -1,0 +1,105 @@
+/* The Matrix Gaming Arena, V4 design tokens (owner: Frontend). Spec: redesign-docs/v4/00-spec.md §3.
+   Contrast (WCAG, computed): ink on paper 18.4:1, fg-2 on paper 6.9:1, green-ink on paper 4.7:1,
+   paper on dark 16.4:1, fg-2 on dark 8.2:1, green on dark 12.0:1, ink on sage 6.5:1, ink on green 12.8:1. */
+:root {
+  /* palette */
+  --c-dark: #121812;
+  --c-dark-2: #1b231b;
+  --c-sage: #8f9a8c;
+  --c-mist: #dfe5da;
+  --c-paper: #f2f4ee;
+  --c-ink: #0c100c;
+  --c-green: #38f24a;
+  --c-green-ink: #1a7d27;   /* darkest green that still reads as the logo green; 4.7:1 on paper */
+  --c-green-deep: #0b3611;  /* accent text on sage; 4.5:1 */
+  --c-line-ink: rgb(12 16 12 / .12);
+  --c-line-paper: rgb(242 244 238 / .12);
+  --c-line: var(--c-line-ink);
+
+  /* type */
+  --f-display: "Mona Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --f-serif: "Instrument Serif", "Times New Roman", Georgia, serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+  --fs-impact: clamp(4.5rem, 19vw, 23rem);  /* hero wordmark */
+  --fs-h1: clamp(4rem, 3rem + 5vw, 8rem);     /* chapter titles */
+  --fs-h2: clamp(2.6rem, 1.6rem + 3.6vw, 4.6rem);
+  --fs-h3: clamp(1.6rem, 1.2rem + 1.4vw, 2.4rem);
+  --fs-lede: clamp(1.125rem, 1rem + .5vw, 1.45rem);
+  --fs-body: clamp(1rem, .95rem + .2vw, 1.125rem);
+  --fs-small: .875rem;
+  --fs-label: .7rem;
+
+  --lh-tight: .86;
+  --lh-body: 1.55;
+  --track-label: .09em;
+
+  /* motion */
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --ease-in-out: cubic-bezier(.65, 0, .35, 1);
+  --dur-1: .2s;
+  --dur-2: .45s;
+  --dur-3: .8s;
+  --dur-4: 1.2s;
+
+  /* layers (spec §3): body bg < .gl-behind < WebGL canvas < content < header < menu < title screen < cursor */
+  --z-behind: 0;
+  --z-gl: 1;
+  --z-content: 2;
+  --z-header: 50;
+  --z-menu: 60;
+  --z-start: 70;
+  --z-cursor: 90;
+
+  /* space */
+  --gutter: clamp(16px, 4vw, 56px);
+  --sec-pad: clamp(96px, 7rem + 6vw, 220px);
+  --header-h: 76px;
+  --r-s: 6px;
+  --r-m: 14px;
+  --r-pill: 999px;
+  --max: 1680px;
+}
+
+/* ── themes: colours follow [data-theme]; chapter backgrounds turn transparent under html.motion-on (base.css) ──
+   Under motion-on the page is one blended colour (motion/core/scroll.js), so every chapter takes the tokens of the dominant
+   theme (html[data-ui]); otherwise the outgoing chapter's text would sit unreadable on the incoming background. ── */
+[data-theme="paper"],
+html.motion-on[data-ui="paper"] [data-chapter] {
+  --bg: var(--c-paper);
+  --fg: var(--c-ink);
+  --fg-2: #4d554b;
+  --accent: var(--c-green-ink);
+  --line: var(--c-line-ink);
+  --line-2: rgb(12 16 12 / .3);
+  --raise: var(--c-mist);
+  --contour: rgb(143 154 140 / .55);
+  --focus: var(--c-green-ink);
+  color-scheme: light;
+}
+[data-theme="dark"],
+html.motion-on[data-ui="dark"] [data-chapter] {
+  --bg: var(--c-dark);
+  --fg: var(--c-paper);
+  --fg-2: #a9b2a5;
+  --accent: var(--c-green);
+  --line: var(--c-line-paper);
+  --line-2: rgb(242 244 238 / .3);
+  --raise: var(--c-dark-2);
+  --contour: rgb(223 229 218 / .075);
+  --focus: var(--c-green);
+  color-scheme: dark;
+}
+[data-theme="sage"],
+html.motion-on[data-ui="sage"] [data-chapter] {
+  --bg: var(--c-sage);
+  --fg: var(--c-ink);
+  --fg-2: #1d241c;
+  --accent: var(--c-green-deep);
+  --line: rgb(12 16 12 / .16);
+  --line-2: rgb(12 16 12 / .38);
+  --raise: #9ba697;
+  --contour: rgb(12 16 12 / .13);
+  --focus: var(--c-ink);
+  color-scheme: light;
+}

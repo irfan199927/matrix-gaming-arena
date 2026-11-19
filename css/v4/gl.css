@@ -1,0 +1,36 @@
+/* V4 WebGL stage (agent G, redesign-docs/v4/00-spec.md §5). Layers: .gl-behind (z 0) < stage (z 1) < content (z 2).
+   The stage is created by js/v4/gl/index.js only for tier > 0; html.gl-on is set once it is drawing. */
+.gl-stage {
+  position: fixed; inset: 0; z-index: var(--z-gl, 1);
+  pointer-events: none; overflow: hidden; contain: strict;
+  --gl-fg: var(--c-ink, #0c100c); --gl-line: var(--c-green-ink, #1a7d27); --gl-chip: rgba(242, 244, 238, .78);
+}
+.gl-stage[data-tone="dark"] { --gl-fg: var(--c-paper, #f2f4ee); --gl-line: var(--c-green, #38f24a); --gl-chip: rgba(18, 24, 18, .62); }
+.gl-canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%; display: block;
+  opacity: 0; transition: opacity .9s var(--ease-out, cubic-bezier(.16, 1, .3, 1));
+}
+html.gl-on .gl-canvas { opacity: 1; }
+
+/* fallback stills and the static portal disc give way to the live stage */
+html.gl-on .gl-still { opacity: 0; }
+html.gl-on [data-gl-anchor] .portal { opacity: 0; visibility: hidden; transition: opacity .6s, visibility 0s .6s; }
+
+/* exploded-view callouts (hero) */
+.gl-labels {
+  position: absolute; inset: 0; visibility: hidden; color: var(--gl-fg);
+  font: 500 .68rem/1 var(--f-mono, "JetBrains Mono", ui-monospace, monospace);
+  letter-spacing: .14em; text-transform: uppercase;
+}
+.gl-leaders { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.gl-lead { fill: none; stroke: var(--gl-line); stroke-width: 1; stroke-dasharray: 1; }
+.gl-dot { fill: var(--gl-line); }
+.gl-ring { fill: none; stroke: var(--gl-line); stroke-width: 1; }
+.gl-tag {
+  position: absolute; left: 0; top: 0; white-space: nowrap;
+  padding: .55em .75em; border-radius: 2px; background: var(--gl-chip);
+  will-change: transform, opacity; transition: color .4s, background-color .4s;
+}
+.gl-tag b { color: var(--gl-line); font-weight: 600; margin-right: .8em; }
+
+@media (prefers-reduced-motion: reduce) { .gl-stage { display: none; } }

@@ -1,0 +1,4 @@
+GSAP 3.15.0 (gsap.min.js, ScrollTrigger.min.js, SplitText.min.js, CustomEase.min.js)
+Copyright GreenSock / Webflow. Licensed under the GSAP Standard "No Charge" License,
+which permits free use, including commercial use: https://gsap.com/standard-license
+Source: https://www.npmjs.com/package/gsap (package.json "license" field kept alongside).

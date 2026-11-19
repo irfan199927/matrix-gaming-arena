@@ -1,0 +1,59 @@
+/* V4 section styles: "Message from the arena" (owner: Frontend). */
+
+.message { padding-top: clamp(84px, 11vw, 170px); }
+.message-head { display: grid; justify-items: center; gap: 12px; text-align: center; margin-bottom: clamp(28px, 4vw, 56px); }
+.mark { width: 26px; height: 26px; fill: var(--c-green); }
+
+/* stage: two marquee rows behind the photo, the neon racetrack drawn over both */
+.message-stage {
+  position: relative; display: grid; align-content: center; gap: clamp(4px, .8vw, 12px);
+  min-height: clamp(460px, 58vw, 860px); margin-inline: calc(-1 * var(--gutter));
+}
+.marquee { position: relative; width: 100%; overflow: hidden; white-space: nowrap; }
+.marquee-track { display: inline-flex; width: max-content; will-change: transform; }
+.marquee-track > span { display: inline-block; padding-right: .42em; }
+.marquee--serif {
+  font-family: var(--f-serif); font-style: italic; font-weight: 400;
+  font-size: clamp(4.4rem, 1.4rem + 10.4vw, 13.5rem); line-height: .98; letter-spacing: -.012em; color: var(--c-green);
+}
+.marquee--grotesk {
+  font-family: var(--f-display); font-weight: 880; font-stretch: 96%; text-transform: uppercase;
+  font-size: clamp(4rem, 1.2rem + 9.6vw, 12.4rem); line-height: .84; letter-spacing: -.038em; color: var(--c-paper);
+}
+.marquee--grotesk em { font-family: var(--f-serif); font-style: italic; font-weight: 400; font-stretch: 100%; text-transform: none; letter-spacing: -.012em; color: var(--c-green); }
+.marquee--serif .marquee-track > span::after, .marquee--grotesk .marquee-track > span::after { content: "·"; display: inline-block; margin-left: .42em; opacity: .35; font-style: normal; }
+
+/* backdrop photo: wide and translucent BEHIND the marquee text (rows sit on z 1), edges faded into the section */
+.message-stage .marquee { z-index: 1; }
+.message-photo {
+  position: absolute; left: 50%; top: 50%; z-index: 0; transform: translate(-50%, -50%);
+  width: min(100%, 1500px); margin: 0; pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse closest-side at 50% 50%, #000 48%, transparent 100%);
+  mask-image: radial-gradient(ellipse closest-side at 50% 50%, #000 48%, transparent 100%);
+}
+.message-photo img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; object-position: 48% 50%; opacity: .46; filter: saturate(.9) contrast(1.08); }
+.message-photo figcaption { position: absolute; left: 0; bottom: calc(100% + 8px); color: var(--fg-2); white-space: nowrap; }
+
+.racetrack {
+  position: absolute; left: 50%; top: 50%; z-index: 2; width: min(96vw, 1220px); height: auto;
+  transform: translate(-50%, -50%) rotate(-7deg); overflow: visible; pointer-events: none;
+}
+.racetrack-path { fill: none; stroke: var(--c-green); stroke-width: clamp(4px, .5vw, 7px); stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+
+/* manifesto: giant uppercase grotesk, green serif accent words */
+.manifesto {
+  max-width: 15.6em; margin: clamp(56px, 8vw, 128px) auto 0; text-align: center; text-wrap: balance;
+  font-family: var(--f-display); font-weight: 860; font-stretch: 100%; text-transform: uppercase;
+  font-size: clamp(2.3rem, .9rem + 4.9vw, 6.6rem); line-height: .9; letter-spacing: -.035em; color: var(--c-paper);
+}
+.manifesto em { font-family: var(--f-serif); font-style: italic; font-weight: 400; font-stretch: 100%; letter-spacing: -.012em; color: var(--c-green); font-size: 1.07em; line-height: 0; }
+
+@media (max-width: 759px) {
+  .message-stage { min-height: 128vw; }
+  .marquee--serif { font-size: 21vw; }
+  .marquee--grotesk { font-size: 19vw; }
+  .message-photo { width: 100%; }
+  .message-photo img { aspect-ratio: 4 / 3; }
+  .racetrack { width: 132vw; transform: translate(-50%, -50%) rotate(-74deg); }
+  .manifesto { font-size: clamp(2rem, 10.4vw, 3.4rem); max-width: 11em; }
+}

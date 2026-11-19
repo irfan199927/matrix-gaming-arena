@@ -1,0 +1,25 @@
+/* V4 section styles: player reviews, big serif quotes on a horizontal track (owner: Frontend). */
+
+.score { display: grid; justify-items: start; gap: 10px; }
+@media (min-width: 900px) { .score { justify-items: end; text-align: right; } }
+.score-num { font-family: var(--f-display); font-weight: 900; font-size: clamp(5rem, 2.6rem + 7vw, 10.5rem); line-height: .78; letter-spacing: -.06em; font-variant-numeric: lining-nums; }
+.stars { display: flex; gap: 4px; }
+.stars svg { width: 18px; height: 18px; }
+
+.reviews-track {
+  display: flex; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
+  margin-inline: calc(-1 * var(--gutter)); padding: 10px var(--gutter) 30px; scroll-padding-inline: var(--gutter);
+  scrollbar-width: thin; scrollbar-color: rgb(12 16 12 / .5) transparent;
+}
+.reviews-track:focus-visible { outline-offset: -4px; }
+.review {
+  flex: 0 0 min(84vw, 760px); scroll-snap-align: start;
+  display: grid; grid-template-rows: auto 1fr auto; gap: clamp(20px, 2.6vw, 36px);
+  min-height: clamp(300px, 32vw, 470px); padding: 6px clamp(22px, 3.2vw, 56px) 6px 0; margin-right: clamp(22px, 3.2vw, 56px);
+  border-right: 1px solid var(--line-2);
+}
+.review:last-child { border-right: 0; margin-right: 0; }
+.review blockquote { margin: 0; }
+.review blockquote p { font-family: var(--f-serif); font-weight: 400; font-size: clamp(1.9rem, .9rem + 2.9vw, 3.9rem); line-height: 1.02; letter-spacing: -.012em; text-wrap: balance; }
+.review figcaption { padding-top: 14px; border-top: 1px solid var(--line-2); }
+.review .stars svg { width: 15px; height: 15px; }

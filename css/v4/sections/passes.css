@@ -1,0 +1,46 @@
+/* V4 section styles: passes as a "season pass" progression track (owner: Frontend). */
+
+.pass-track { max-width: var(--max); margin: 0 auto clamp(64px, 8vw, 120px); }
+.track-title { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 16px; margin-bottom: clamp(24px, 3vw, 40px); font-family: var(--f-display); font-weight: 860; text-transform: uppercase; font-size: clamp(1.5rem, 1.1rem + 1.2vw, 2.2rem); line-height: 1; letter-spacing: -.02em; }
+.track-title .label { color: var(--accent); }
+
+.track { position: relative; display: grid; }
+.track::before { content: ""; position: absolute; background: var(--line-2); }
+.pass { position: relative; display: grid; align-content: start; gap: 10px; }
+.pass-node { position: absolute; width: 15px; height: 15px; border-radius: 50%; border: 1px solid var(--fg-2); background: var(--bg, var(--c-dark)); }
+.pass--best .pass-node { background: var(--c-green); border-color: var(--c-green); box-shadow: 0 0 0 6px rgb(56 242 74 / .16); }
+.pass-lv { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 10px; color: var(--fg-2); }
+.pass-tag { padding: 4px 8px; border-radius: 3px; background: var(--c-green); color: var(--c-ink); font-style: normal; }
+.pass-name { font-family: var(--f-display); font-weight: 880; text-transform: uppercase; font-size: clamp(1.6rem, 1.2rem + 1.2vw, 2.5rem); line-height: .9; letter-spacing: -.025em; }
+.pass-price { font-family: var(--f-display); font-weight: 900; font-size: clamp(3rem, 1.8rem + 3.4vw, 5.4rem); line-height: .86; letter-spacing: -.05em; font-variant-numeric: tabular-nums lining-nums; }
+.pass--best .pass-price { color: var(--c-green); }
+.pass-price--ask { font-family: var(--f-serif); font-style: italic; font-weight: 400; letter-spacing: -.01em; color: var(--accent); }
+.pass-meta { max-width: 30ch; color: var(--fg-2); }
+.pass-cta {
+  justify-self: start; display: inline-flex; align-items: center; gap: 9px; margin-top: 8px; padding: 13px 16px;
+  border: 1px solid var(--line-2); border-radius: var(--r-s);
+  font-family: var(--f-mono); font-size: .72rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; text-decoration: none;
+  transition: background-color var(--dur-1), color var(--dur-1), border-color var(--dur-1);
+}
+.pass-cta .ic { width: 16px; height: 16px; }
+.pass-cta:hover, .pass--best .pass-cta { background: var(--c-green); border-color: var(--c-green); color: var(--c-ink); }
+.pass--best .pass-cta:hover { background: #5cff6b; }
+.passes-note { max-width: var(--max); margin: 0 auto; color: var(--fg-2); }
+
+/* desktop: horizontal track, nodes on one line, columns separated by hairlines */
+@media (min-width: 900px) {
+  .track { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .track::before { left: 0; right: 0; top: 7px; height: 1px; }
+  .pass { padding: 46px clamp(16px, 2vw, 30px) 6px 0; }
+  .pass + .pass { padding-left: clamp(16px, 2vw, 30px); border-left: 1px solid var(--line); }
+  .pass-node { top: 0; left: 0; }
+  .pass + .pass .pass-node { left: clamp(16px, 2vw, 30px); }
+  .pass-track--race .track::before { right: 50%; }
+}
+/* phone / tablet: a vertical progression with the line on the left */
+@media (max-width: 899px) {
+  .track { gap: 34px; }
+  .track::before { left: 7px; top: 8px; bottom: 8px; width: 1px; }
+  .pass { padding-left: 38px; }
+  .pass-node { left: 0; top: 2px; }
+}

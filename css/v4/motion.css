@@ -1,0 +1,84 @@
+/* Motion core (owner M1; redesign-docs/v4/00-spec.md §5–§7).
+   Nothing here can trap content: pre-animation states exist only under html.js with motion allowed, a 4 s CSS
+   failsafe reveals them if the motion core never comes up, and html.motion-fail reveals them at once. */
+
+/* ── Lenis (rules from vendor/lenis/lenis.css 1.3.27, MIT; the stopped state is handled by the scroll lock below) ── */
+html.lenis, html.lenis body { height: auto; }
+.lenis [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-smooth iframe { pointer-events: none; }
+
+/* ── scroll lock under the title screen and the menu; the gutter stays reserved so nothing shifts when it ends ── */
+html.gate-on, html.menu-open { overflow: hidden; scrollbar-gutter: stable; }
+html.gate-on body, html.menu-open body { overflow: hidden; }
+
+/* ── pre-animation states (generic data-* hooks) ── */
+@media (prefers-reduced-motion: no-preference) {
+  html.js:not(.motion-fail) :is([data-reveal], [data-split]):not(.mx-armed):not([data-m2]):not([data-m2] *) { opacity: 0; }
+  html.js:not(.motion-on):not(.motion-fail) :is([data-reveal], [data-split]):not(.mx-armed):not([data-m2]):not([data-m2] *) { animation: mx-failsafe .6s 4s both; }
+}
+@keyframes mx-failsafe { to { opacity: 1; } }
+html.motion-fail :is([data-reveal], [data-split], .mx-line, .mx-word, .mx-char) { opacity: 1 !important; transform: none !important; clip-path: none !important; }
+.mx-line { padding-bottom: .06em; margin-bottom: -.06em; } /* masks keep descenders */
+
+/* ── header: hides on scroll down, returns on scroll up (motion core sets html.header-hidden) ── */
+html.motion-on:not(.gate-on) .site-header { transition: color var(--dur-2), opacity var(--dur-2), visibility 0s, translate var(--dur-3) var(--ease-out); }
+html.motion-on.header-hidden:not(.menu-open) .site-header { translate: 0 calc(-100% - 12px); }
+
+/* ── menu: a wipe down, items rise in sequence; the preview slides toward the hovered item ── */
+@media (prefers-reduced-motion: no-preference) {
+  html.motion-on .menu {
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path var(--dur-3) var(--ease-in-out), opacity var(--dur-2) var(--ease-out), visibility 0s linear var(--dur-3);
+  }
+  html.motion-on.menu-open .menu { clip-path: inset(0 0 0 0); transition: clip-path var(--dur-3) var(--ease-in-out), opacity var(--dur-1), visibility 0s; }
+  html.motion-on .menu-item, html.motion-on .menu-foot { opacity: 0; translate: 0 40px; transition: opacity var(--dur-1), translate var(--dur-2) var(--ease-out); }
+  html.motion-on.menu-open .menu-item, html.motion-on.menu-open .menu-foot {
+    opacity: 1; translate: 0 0;
+    transition: opacity var(--dur-3) var(--ease-out), translate var(--dur-3) var(--ease-out);
+    transition-delay: calc(.22s + var(--i, 6) * .06s);
+  }
+  html.motion-on .menu-preview { translate: 0 var(--mx-py, 0px); transition: translate var(--dur-3) var(--ease-out), scale var(--dur-2) var(--ease-out); }
+  html.motion-on .menu-preview.is-swap { animation: mx-swap var(--dur-2) var(--ease-out); }
+}
+@keyframes mx-swap { from { opacity: .35; scale: 1.035; } }
+
+/* ── reticle cursor (tier 2, fine pointer, motion allowed): html.has-cursor ── */
+html.has-cursor, html.has-cursor * { cursor: none !important; }
+html.has-cursor :is(input, textarea, select, iframe, [contenteditable="true"], [contenteditable=""], [data-cursor="none"]) { cursor: auto !important; }
+.mx-reticle, .mx-cursor-label { position: fixed; left: 0; top: 0; z-index: var(--z-cursor, 90); pointer-events: none; will-change: transform; }
+.mx-reticle { width: 0; height: 0; color: #fff; mix-blend-mode: difference; }
+.mx-reticle i { position: absolute; left: -15px; top: -15px; width: 30px; height: 30px; transition: transform var(--dur-2) var(--ease-out), opacity var(--dur-1); }
+.mx-reticle__ring { border: 1.5px solid; border-radius: 50%; }
+.mx-reticle__cross {
+  background:
+    linear-gradient(currentColor, currentColor) center top / 1.5px 30% no-repeat,
+    linear-gradient(currentColor, currentColor) center bottom / 1.5px 30% no-repeat,
+    linear-gradient(currentColor, currentColor) left center / 30% 1.5px no-repeat,
+    linear-gradient(currentColor, currentColor) right center / 30% 1.5px no-repeat;
+}
+.mx-reticle__dot { scale: .1; border-radius: 50%; background: currentColor; }
+.mx-reticle.is-link .mx-reticle__ring { transform: scale(1.65); }
+.mx-reticle.is-link .mx-reticle__cross { transform: rotate(45deg) scale(.7); }
+.mx-reticle.is-label .mx-reticle__ring { transform: scale(.45); }
+.mx-reticle.is-label .mx-reticle__cross { transform: scale(.3); opacity: 0; }
+.mx-reticle.is-down i { transform: scale(.8); }
+.mx-reticle.is-off i { opacity: 0; transform: scale(.4); }
+.mx-cursor-label {
+  margin: 14px 0 0 14px; padding: .5em .7em .45em; border-radius: 2px;
+  font: 500 var(--fs-label, .7rem) / 1 var(--f-mono, monospace); letter-spacing: .14em; text-transform: uppercase; white-space: nowrap;
+  background: var(--c-green, #38f24a); color: var(--c-ink, #0c100c);
+  opacity: 0; scale: .6; transform-origin: 0 0; transition: opacity var(--dur-1), scale var(--dur-2) var(--ease-out);
+}
+.mx-cursor-label.is-on { opacity: 1; scale: 1; }
+
+/* ── MATRIX decode ([data-scramble]) ── */
+.mx-ch { display: inline-block; text-align: center; }
+.mx-ch.is-glitch { color: var(--c-green, #38f24a); }
+html[data-ui="paper"] .mx-ch.is-glitch, html[data-ui="sage"] .mx-ch.is-glitch { color: var(--c-green-ink, #1a7d27); }
+.mx-kana { display: inline-block; font-family: var(--f-mono, monospace); font-weight: 700; font-size: .62em; line-height: 1; vertical-align: .32em; }
+
+/* ── marquee rows ([data-marquee] > .marquee-track, moved by the motion core) ── */
+html.motion-on [data-marquee] .marquee-track { will-change: transform; }
+
+/* ── the title screen hands focus to <main> when it ends ── */
+main[tabindex="-1"]:focus { outline: none; }
